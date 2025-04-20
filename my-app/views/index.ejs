@@ -1,0 +1,33 @@
+// ---------- views/index.ejs ----------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoring Sensor</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Monitoring Suhu & Kelembaban</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Waktu</th>
+          <th>Suhu (°C)</th>
+          <th>Kelembaban (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(item => { %>
+          <tr>
+            <td><%= new Date(item.createdAt).toLocaleString() %></td>
+            <td><%= item.suhu %></td>
+            <td><%= item.kelembaban %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

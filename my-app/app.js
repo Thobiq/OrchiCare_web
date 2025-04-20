@@ -1,11 +1,20 @@
+// ---------- app.js ----------
 const express = require('express');
+const path = require('path');
 const app = express();
-const userRoutes = require('./routes/userRoutes');
+const { sequelize } = require('./models');
+const sensorRoutes = require('./routes/sensorRoutes');
+require('dotenv').config();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
-app.use(express.static('public'));
-app.use('/', userRoutes);
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', sensorRoutes);
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`Web API berjalan di port ${process.env.PORT}`);
+  });
 });
