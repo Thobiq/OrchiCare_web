@@ -1,18 +1,10 @@
-// ---------- models/sensor.js ----------
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const db = require('../config/database');
 
-const Sensor = sequelize.define('Sensor', {
-  suhu: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
-  kelembaban: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
-}, {
-  timestamps: true,
-});
+const insertSensorData = async (temperature, humidity) => {
+  const query = 'INSERT INTO sensor_logs (temperature, humidity, created_at) VALUES ($1, $2, NOW())';
+  await db.query(query, [temperature, humidity]);
+};
 
-module.exports = Sensor;
+module.exports = {
+  insertSensorData,
+};

@@ -1,2 +1,2 @@
-// ---------- mqttApp.js ----------
+// mqttApp.js
 require('./mqtt/mqttHandler');

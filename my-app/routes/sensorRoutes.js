@@ -1,8 +1,7 @@
-// ---------- routes/sensorRoutes.js ----------
 const express = require('express');
 const router = express.Router();
-const sensorController = require('../controllers/sensorController');
+const { getSensorData } = require('../controllers/sensorController');
 
-router.get('/', sensorController.getAllSensorData);
+router.get('/api/data', getSensorData);
 
 module.exports = router;

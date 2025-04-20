@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitoring Realtime</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #f3f4f6; padding: 1rem; }
+    .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .title { text-align: center; font-size: 18px; font-weight: bold; color: #007f3b; margin-bottom: 1rem; }
+    .range { text-align: center; margin-top: 8px; font-size: 14px; }
+    canvas { display: block; margin: auto; }
+    .chart-container { position: relative; width: 300px; height: 200px; margin: auto; }
+    .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%); font-size: 20px; font-weight: bold; color: #444; }
+    .detail-button { 
+      display: block;width: 200px;
+      margin: 20px auto 0;
+      padding: 10px; 
+      background: #007f3b; 
+      color: white; 
+      border: none; 
+      border-radius: 15px; 
+      font-size: 16px; 
+      cursor: pointer; 
+      text-align: center; 
+      text-decoration: none; }
+    .range {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      padding: 0 70px;
+      color: #555;
+    }
+    .title {
+      text-align: left;
+      font-size: 18px;
+      font-weight: bold;
+      color: #007f3b;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .title::before {
+      content: '🏠';
+      font-size: 20px;
+      margin-right: 10px;
+      
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="title">Suhu Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="tempChart"></canvas>
+    <div class="gauge-value" id="tempValue">--°C</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+  <a href="detail.html" class="detail-button">Detail</a>
+</div>
+
+<div class="card">
+  <div class="title">Kelembaban Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="humChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+  <a href="detail.html" class="detail-button">Detail</a>
+</div>
+
+<a href="detail.html" class="detail-button">Lihat Detail Monitoring</a>
+
+<script>
+  let tempChart, humChart;
+  const maxVal = 30;
+
+  const getColor = (value) => {
+    if (value < 26) return '#28C76F'; // green
+    else if (value < 28) return '#FBC02D'; // yellow
+    else return '#EF5350'; // red
+  };
+
+  const createChart = (ctx, initialValue) => {
+    const percent = (Math.min(initialValue, maxVal) / maxVal) * 100;
+    return new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [percent, 100 - percent],
+          backgroundColor: [getColor(initialValue), '#E0E0E0'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        rotation: -130,
+        circumference: 260,
+        cutout: '80%',
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false }
+        },
+        animation: false
+      }
+    });
+  };
+
+  const updateChart = (chart, value, element, unit) => {
+    const percent = (Math.min(value, maxVal) / maxVal) * 100;
+    chart.data.datasets[0].data = [percent, 100 - percent];
+    chart.data.datasets[0].backgroundColor = [getColor(value), '#E0E0E0'];
+    chart.update();
+    element.innerText = `${value}${unit}`;
+  };
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/data');
+      const data = await res.json();
+      updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C');
+      updateChart(humChart, data.humidity, document.getElementById('humValue'), '%');
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
+  };
+
+  window.onload = () => {
+    tempChart = createChart(document.getElementById('tempChart'), 25.5);
+    humChart = createChart(document.getElementById('humChart'), 25.5);
+    fetchData();
+    setInterval(fetchData, 3000);
+  };
+</script>
+
+</body>
+</html>

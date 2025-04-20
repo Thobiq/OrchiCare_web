@@ -1,11 +1,18 @@
 {
+  "name": "orchicare_web",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "dotenv": "^16.5.0",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
     "mqtt": "^5.11.0",
-    "pg": "^8.14.1",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
-  }
+    "pg": "^8.14.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Tugas project PPL &amp; ADPL \"Sistem Kontrol dan Monitoring Smart Greenhouse pada Tanaman Anggrek Berbasis IoT\""
 }

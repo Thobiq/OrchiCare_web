@@ -1,19 +1,17 @@
-// ---------- controllers/sensorController.js ----------
-const { Sensor } = require('../models');
-
-const sensorController = {
-  async storeSensorData(data) {
-    const { suhu, kelembaban } = data;
-    if (suhu != null && kelembaban != null) {
-      await Sensor.create({ suhu, kelembaban });
-      console.log('Data sensor disimpan:', data);
-    }
-  },
-
-  async getAllSensorData(req, res) {
-    const data = await Sensor.findAll({ order: [['createdAt', 'DESC']] });
-    res.render('index', { data });
-  }
+let sensorData = {
+  temperature: 0,
+  humidity: 0,
 };
 
-module.exports = sensorController;
+const getSensorData = (req, res) => {
+  res.json(sensorData);
+};
+
+const setSensorData = (data) => {
+  sensorData = data;
+};
+
+module.exports = {
+  getSensorData,
+  setSensorData,
+};
