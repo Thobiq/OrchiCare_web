@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detail Monitoring - Kelembaban</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f3f4f6;
+      padding: 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .title {
+      text-align: left;
+      font-size: 18px;
+      font-weight: bold;
+      color: #007f3b;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .title::before {
+      content: '🏠';
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    .chart-container {
+      position: relative;
+      width: 250px;
+      height: 180px;
+      margin: auto;
+    }
+    .gauge-value {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+    .range {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      padding: 0 70px;
+      color: #555;
+    }
+    .detail-section {
+      background: #0e9f6e;
+      color: white;
+      border-radius: 12px;
+      margin-top: 1rem;
+      padding: 15px;
+    }
+    .detail-section h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-top: 1px solid rgba(255,255,255,0.3);
+    }
+    .status-pill {
+      background: white;
+      color: #0e9f6e;
+      padding: 2px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 14px;
+      min-width: 45px;
+      text-align: center;
+    }
+    .status-off {
+      color: white;
+      background: #9e9e9e;
+    }
+    .btn-back {
+      display: block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background: #007f3b;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      text-align: center;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="title">Kelembaban Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="humChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+
+  <div class="detail-section">
+    <h3>Detail</h3>
+    <div class="detail-row">
+      <span>Sensor</span>
+      <span class="status-pill" id="sensorStatus">--</span>
+    </div>
+    <div class="detail-row">
+      <span>Penyiraman</span>
+      <span class="status-pill status-off" id="wateringStatus">--</span>
+    </div>
+  </div>
+</div>
+
+<a href="index.html" class="btn-back">Kembali</a>
+
+<script>
+  const maxVal = 30;
+  let humChart;
+
+  const getColor = (value) => {
+    if (value < 26) return '#28C76F';   // Hijau
+    else if (value < 28) return '#FBC02D'; // Kuning
+    else return '#EF5350';             // Merah
+  };
+
+  const createChart = (ctx, initialValue) => {
+    const percent = (Math.min(initialValue, maxVal) / maxVal) * 100;
+    return new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [percent, 100 - percent],
+          backgroundColor: [getColor(initialValue), '#E0E0E0'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        rotation: -130,
+        circumference: 260,
+        cutout: '80%',
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false }
+        },
+        animation: false
+      }
+    });
+  };
+
+  const updateUI = (humidity) => {
+    const percent = (Math.min(humidity, maxVal) / maxVal) * 100;
+    humChart.data.datasets[0].data = [percent, 100 - percent];
+    humChart.data.datasets[0].backgroundColor = [getColor(humidity), '#E0E0E0'];
+    humChart.update();
+
+    document.getElementById('humValue').innerText = `${humidity}%`;
+
+    const sensorStatus = document.getElementById('sensorStatus');
+    sensorStatus.innerText = "ON";
+    sensorStatus.classList.remove("status-off");
+
+    const wateringStatus = document.getElementById('wateringStatus');
+    if (humidity > 28 || humidity < 24) {
+      wateringStatus.innerText = "ON";
+      wateringStatus.classList.remove("status-off");
+    } else {
+      wateringStatus.innerText = "OFF";
+      wateringStatus.classList.add("status-off");
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/data');
+      const data = await res.json();
+      updateUI(data.humidity);
+    } catch (err) {
+      console.error('Gagal mengambil data:', err);
+    }
+  };
+
+  window.onload = () => {
+    humChart = createChart(document.getElementById('humChart'), 25.5);
+    fetchData();
+    setInterval(fetchData, 3000);
+  };
+</script>
+
+</body>
+</html>
