@@ -8,10 +8,16 @@
   <style>
     body { font-family: sans-serif; background: #f3f4f6; padding: 1rem; }
     .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .card-mode{ 
+      background: #ACFFD7; 
+      border-radius: 20px; 
+      padding: 20px; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+      margin-bottom: 20px; }
     .title { text-align: center; font-size: 18px; font-weight: bold; color: #007f3b; margin-bottom: 1rem; }
     .range { text-align: center; margin-top: 8px; font-size: 14px; }
     canvas { display: block; margin: auto; }
-    .chart-container { position: relative; width: 300px; height: 200px; margin: auto; }
+    .chart-container { position: relative; width: 300px; height: 200px; margin-left: -15px; }
     .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%); font-size: 20px; font-weight: bold; color: #444; }
     .detail-button { 
       display: block;width: 200px;
@@ -45,11 +51,17 @@
       content: '🏠';
       font-size: 20px;
       margin-right: 10px;
-      
     }
   </style>
 </head>
 <body>
+
+<div class="card-mode">
+  <h4> Sitem dalam Mode Otomatis</h1>
+  <p>Sistem Berjalan Otomatis</p>
+  <a href="#" class="detail-button">Ubah mode ?</a>
+
+</div>
 
 <div class="card">
   <div class="title">Suhu Greenhouse</div>
@@ -68,29 +80,51 @@
     <div class="gauge-value" id="humValue">--%</div>
   </div>
   <div class="range"><span>24</span><span>30</span></div>
-  <a href="detail.html" class="detail-button">Detail</a>
+  <a href="detail_kelembapan.html" class="detail-button">Detail</a>
 </div>
 
-<a href="detail.html" class="detail-button">Lihat Detail Monitoring</a>
+<div class="card">
+  <div class="title">Kelembaban Tanaman</div>
+  <div class="chart-container">
+    <canvas id="humPlantChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+  <a href="detail_kelembapan.html" class="detail-button">Detail</a>
+</div>
+
 
 <script>
   let tempChart, humChart;
-  const maxVal = 30;
+  const maxTemp = 40;
+  const maxHum = 100;
 
-  const getColor = (value) => {
-    if (value < 26) return '#28C76F'; // green
-    else if (value < 28) return '#FBC02D'; // yellow
-    else return '#EF5350'; // red
+  // Warna suhu 
+  const getColorTemp = (value) => {
+    if (value >= 31) return '#EF5350'; // merah
+    else if (value >= 28 && value < 30) return '#28C76F'; // hijau
+    else if (value >= 30 && value < 31) return '#FBC02D'; // kuning
+    else return '#E0E0E0';
   };
 
-  const createChart = (ctx, initialValue) => {
-    const percent = (Math.min(initialValue, maxVal) / maxVal) * 100;
+  // Warna kelembaban
+  const getColorHum = (value) => {
+    if (value > 80) return '#EF5350'; // merah
+    else if (value === 80) return '#FBC02D'; // kuning
+    else if (value < 80) return '#28C76F'; // hijau
+    else return '#E0E0E0';
+  };
+
+  const createChart = (ctx, initialValue, type) => {
+    const max = type === 'temperature' ? maxTemp : maxHum;
+    const percent = (Math.min(initialValue, max) / max) * 100;
+    const color = type === 'temperature' ? getColorTemp(initialValue) : getColorHum(initialValue);
     return new Chart(ctx, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [percent, 100 - percent],
-          backgroundColor: [getColor(initialValue), '#E0E0E0'],
+          backgroundColor: [color, '#E0E0E0'],
           borderWidth: 0
         }]
       },
@@ -107,10 +141,12 @@
     });
   };
 
-  const updateChart = (chart, value, element, unit) => {
-    const percent = (Math.min(value, maxVal) / maxVal) * 100;
+  const updateChart = (chart, value, element, unit, type) => {
+    const max = type === 'temperature' ? maxTemp : maxHum;
+    const percent = (Math.min(value, max) / max) * 100;
+    const color = type === 'temperature' ? getColorTemp(value) : getColorHum(value);
     chart.data.datasets[0].data = [percent, 100 - percent];
-    chart.data.datasets[0].backgroundColor = [getColor(value), '#E0E0E0'];
+    chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
     chart.update();
     element.innerText = `${value}${unit}`;
   };
@@ -119,18 +155,18 @@
     try {
       const res = await fetch('/api/data');
       const data = await res.json();
-      updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C');
-      updateChart(humChart, data.humidity, document.getElementById('humValue'), '%');
+      updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C', 'temperature');
+      updateChart(humChart, data.humidity, document.getElementById('humValue'), '%', 'humidity');
     } catch (err) {
       console.error('Error fetching data:', err);
     }
   };
 
   window.onload = () => {
-    tempChart = createChart(document.getElementById('tempChart'), 25.5);
-    humChart = createChart(document.getElementById('humChart'), 25.5);
+    tempChart = createChart(document.getElementById('tempChart'), 25.5, 'temperature');
+    humChart = createChart(document.getElementById('humChart'), 75, 'humidity');
     fetchData();
-    setInterval(fetchData, 3000);
+    setInterval(fetchData, 1000);
   };
 </script>
 

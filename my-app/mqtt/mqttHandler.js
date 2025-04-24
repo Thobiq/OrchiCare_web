@@ -27,15 +27,22 @@ mqttClient.on('message', async (topic, message) => {
 
   if (msg.includes('Suhu')) {
     sensorData.temperature = parseFloat(msg.replace('Suhu :', '').trim());
-  } else if (msg.includes('Kelembaban')) {
-    sensorData.humidity = parseFloat(msg.replace('Kelembaban :', '').trim());
+  }
 
+  if (msg.includes('Kelembaban')) {
+    sensorData.humidity = parseFloat(msg.replace('Kelembaban :', '').trim());
+  }
+
+  // Update frontend data terlebih dahulu
+  setSensorData(sensorData);
+
+  // Simpan ke database jika data lengkap
+  if (sensorData.temperature && sensorData.humidity) {
     try {
       await insertSensorData(sensorData.temperature, sensorData.humidity);
       console.log('💾 Data saved to DB');
-      setSensorData(sensorData);
     } catch (err) {
-      console.error('❌ Error saving to DB:', err);
+      console.warn('⚠️ DB Error, data not saved:', err.message);
     }
   }
 });

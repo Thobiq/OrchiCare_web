@@ -36,7 +36,7 @@
       position: relative;
       width: 250px;
       height: 180px;
-      margin-left: 13px;
+      margin: auto;
     }
     .gauge-value {
       position: absolute;
@@ -102,10 +102,10 @@
 <body>
 
 <div class="card">
-  <div class="title">Suhu Greenhouse</div>
+  <div class="title">Kelembaban Greenhouse</div>
   <div class="chart-container">
-    <canvas id="tempChart"></canvas>
-    <div class="gauge-value" id="tempValue">--°C</div>
+    <canvas id="humChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
   </div>
   <div class="range"><span>24</span><span>30</span></div>
 
@@ -129,28 +129,19 @@
 <a href="index.html" class="btn-back">Kembali</a>
 
 <script>
-  let tempChart, humChart;
-  const maxTemp = 30;
+  let humChart;
   const maxHum = 100;
 
-  const getColorTemp = (value) => {
-    if (value >= 31) return '#EF5350';
-    else if (value >= 28 && value <= 29) return '#28C76F';
-    else if (value === 30) return '#FBC02D';
-    else return '#E0E0E0';
-  };
-
   const getColorHum = (value) => {
-    if (value > 80) return '#EF5350';
-    else if (value === 80) return '#FBC02D';
-    else if (value === 79) return '#28C76F';
+    if (value > 80) return '#EF5350';     // Merah
+    else if (value === 80) return '#FBC02D'; // Kuning
+    else if (value <= 79) return '#28C76F'; // Hijau
     else return '#E0E0E0';
   };
 
-  const createChart = (ctx, initialValue, type) => {
-    const max = type === 'temperature' ? maxTemp : maxHum;
-    const percent = (Math.min(initialValue, max) / max) * 100;
-    const color = type === 'temperature' ? getColorTemp(initialValue) : getColorHum(initialValue);
+  const createChart = (ctx, initialValue) => {
+    const percent = (Math.min(initialValue, maxHum) / maxHum) * 100;
+    const color = getColorHum(initialValue);
     return new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -173,23 +164,13 @@
     });
   };
 
-  const updateChart = (chart, value, element, unit, type) => {
-    const max = type === 'temperature' ? maxTemp : maxHum;
-    const percent = (Math.min(value, max) / max) * 100;
-    const color = type === 'temperature' ? getColorTemp(value) : getColorHum(value);
+  const updateChart = (chart, value, element) => {
+    const percent = (Math.min(value, maxHum) / maxHum) * 100;
+    const color = getColorHum(value);
     chart.data.datasets[0].data = [percent, 100 - percent];
     chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
     chart.update();
-    element.innerText = `${value}${unit}`;
-  };
-
-  const setStatus = (element, status) => {
-    element.textContent = status;
-    if (status === 'ON') {
-      element.classList.remove('status-off');
-    } else {
-      element.classList.add('status-off');
-    }
+    element.innerText = `${value}%`;
   };
 
   const fetchData = async () => {
@@ -197,36 +178,13 @@
       const res = await fetch('/api/data');
       const data = await res.json();
 
-      const temp = data.temperature;
-      const hum = data.humidity;
+      
+      updateChart(humChart, data.humidity, document.getElementById('humValue'));
 
-      // Cek sensor aktif atau tidak
-      const sensorStatusEl = document.getElementById('sensorStatus');
-      if (temp == null || hum == null) {
-        setStatus(sensorStatusEl, 'OFF');
-      } else {
-        setStatus(sensorStatusEl, 'ON');
-      }
-
-      // Update chart
-      updateChart(tempChart, temp, document.getElementById('tempValue'), '°C', 'temperature');
-      updateChart(humChart, hum, document.getElementById('humValue'), '%', 'humidity');
-
-      // Atur penyiraman berdasarkan suhu
-      const wateringEl = document.getElementById('wateringStatus');
-      if (temp === 30) {
-        setStatus(wateringEl, 'ON');
-      } else {
-        setStatus(wateringEl, 'OFF');
-      }
-
-      // Atur kipas berdasarkan kelembapan
-      const fanEl = document.getElementById('fanStatus');
-      if (hum >= 79) {
-        setStatus(fanEl, 'ON');
-      } else {
-        setStatus(fanEl, 'OFF');
-      }
+      // Update status tampilan
+      document.getElementById('sensorStatus').innerText = data.sensorStatus || '--';
+      document.getElementById('wateringStatus').innerText = data.wateringStatus || '--';
+      document.getElementById('fanStatus').innerText = data.fanStatus || '--';
 
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -234,14 +192,11 @@
   };
 
   window.onload = () => {
-    tempChart = createChart(document.getElementById('tempChart'), 25.5, 'temperature');
-    humChart = createChart(document.getElementById('humChart'), 75, 'humidity');
+    humChart = createChart(document.getElementById('humChart'), 75);
     fetchData();
     setInterval(fetchData, 1000);
   };
 </script>
-
-
 
 </body>
 </html>
