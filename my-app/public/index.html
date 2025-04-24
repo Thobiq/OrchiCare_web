@@ -70,24 +70,36 @@
     <div class="gauge-value" id="tempValue">--°C</div>
   </div>
   <div class="range"><span>24</span><span>30</span></div>
-  <a href="detail.html" class="detail-button">Detail</a>
+  <a href="detail_temp.html" class="detail-button">Detail</a>
 </div>
 
 <div class="card">
-  <div class="title">Kelembaban Greenhouse</div>
+  <div class="title">Kelembabpan Greenhouse</div>
   <div class="chart-container">
     <canvas id="humChart"></canvas>
     <div class="gauge-value" id="humValue">--%</div>
   </div>
   <div class="range"><span>24</span><span>30</span></div>
-  <a href="detail.html" class="detail-button">Detail</a>
+  <a href="detail_hum.html" class="detail-button">Detail</a>
+</div>
+
+<div class="card">
+  <div class="title">Kelembabpan Tanaman</div>
+  <div class="chart-container">
+    <canvas id="plantHumChart"></canvas>
+    <div class="gauge-value" id="plantHumValue">--%</div>
+  </div>
+  <div class="range"><span>20</span><span>80</span></div>
+  <a href="detail_hum_plant.html" class="detail-button">Detail</a>
 </div>
 
 
+
 <script>
-  let tempChart, humChart;
+  let tempChart, humChart, plantHumChart;
   const maxTemp = 40;
   const maxHum = 100;
+  const maxPlantHum = 100;
 
   // Warna suhu 
   const getColorTemp = (value) => {
@@ -105,59 +117,77 @@
     else return '#E0E0E0';
   };
 
+  const getColorPlantHum = (value) => {
+    if (value > 80) return '#EF5350'; // merah
+    else if (value === 80) return '#FBC02D'; // kuning
+    else if (value < 80) return '#28C76F'; // hijau
+    else return '#E0E0E0';
+  };
+
   const createChart = (ctx, initialValue, type) => {
-    const max = type === 'temperature' ? maxTemp : maxHum;
-    const percent = (Math.min(initialValue, max) / max) * 100;
-    const color = type === 'temperature' ? getColorTemp(initialValue) : getColorHum(initialValue);
-    return new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        datasets: [{
-          data: [percent, 100 - percent],
-          backgroundColor: [color, '#E0E0E0'],
-          borderWidth: 0
-        }]
+  const max = type === 'temperature' ? maxTemp : maxHum;
+  const percent = (Math.min(initialValue, max) / max) * 100;
+  let color;
+  if (type === 'temperature') color = getColorTemp(initialValue);
+  else if (type === 'humidity') color = getColorHum(initialValue);
+  else if (type === 'plant') color = getColorPlantHum(initialValue);
+
+  return new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [percent, 100 - percent],
+        backgroundColor: [color, '#E0E0E0'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      rotation: -130,
+      circumference: 260,
+      cutout: '80%',
+      plugins: {
+        tooltip: { enabled: false },
+        legend: { display: false }
       },
-      options: {
-        rotation: -130,
-        circumference: 260,
-        cutout: '80%',
-        plugins: {
-          tooltip: { enabled: false },
-          legend: { display: false }
-        },
-        animation: false
-      }
-    });
-  };
-
-  const updateChart = (chart, value, element, unit, type) => {
-    const max = type === 'temperature' ? maxTemp : maxHum;
-    const percent = (Math.min(value, max) / max) * 100;
-    const color = type === 'temperature' ? getColorTemp(value) : getColorHum(value);
-    chart.data.datasets[0].data = [percent, 100 - percent];
-    chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
-    chart.update();
-    element.innerText = `${value}${unit}`;
-  };
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/data');
-      const data = await res.json();
-      updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C', 'temperature');
-      updateChart(humChart, data.humidity, document.getElementById('humValue'), '%', 'humidity');
-    } catch (err) {
-      console.error('Error fetching data:', err);
+      animation: false
     }
-  };
+  });
+};
 
-  window.onload = () => {
-    tempChart = createChart(document.getElementById('tempChart'), 25.5, 'temperature');
-    humChart = createChart(document.getElementById('humChart'), 75, 'humidity');
-    fetchData();
-    setInterval(fetchData, 1000);
-  };
+const updateChart = (chart, value, element, unit, type) => {
+  const max = type === 'temperature' ? maxTemp : maxHum;
+  const percent = (Math.min(value, max) / max) * 100;
+  let color;
+  if (type === 'temperature') color = getColorTemp(value);
+  else if (type === 'humidity') color = getColorHum(value);
+  else if (type === 'plant') color = getColorPlantHum(value);
+
+  chart.data.datasets[0].data = [percent, 100 - percent];
+  chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
+  chart.update();
+  element.innerText = `${value}${unit}`;
+};
+
+const fetchData = async () => {
+  try {
+    const res = await fetch('/api/data');
+    const data = await res.json();
+
+    updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C', 'temperature');
+    updateChart(humChart, data.humidity, document.getElementById('humValue'), '%', 'humidity');
+    updateChart(plantHumChart, data.soilMoisture, document.getElementById('plantHumValue'), '%', 'plant'); // plantHumidity
+  } catch (err) {
+    console.error('Error fetching data:', err);
+  }
+};
+
+window.onload = () => {
+  tempChart = createChart(document.getElementById('tempChart'), 25.5, 'temperature');
+  humChart = createChart(document.getElementById('humChart'), 75, 'humidity');
+  plantHumChart = createChart(document.getElementById('plantHumChart'), 45, 'plant');
+  fetchData();
+  setInterval(fetchData, 1000);
+};
 </script>
 
 </body>

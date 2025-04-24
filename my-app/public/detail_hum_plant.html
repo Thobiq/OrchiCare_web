@@ -105,12 +105,12 @@
 <body>
 
 <div class="card">
-  <div class="title">Kelembaban Greenhouse</div>
+  <div class="title">Kelembabpan Tanaman</div>
   <div class="chart-container">
-    <canvas id="humChart"></canvas>
-    <div class="gauge-value" id="humValue">--%</div>
+    <canvas id="plantHumChart"></canvas>
+    <div class="gauge-value" id="plantHumValue">--%</div>
   </div>
-  <div class="range"><span>24</span><span>30</span></div>
+  <div class="range"><span>20</span><span>80</span></div>
 
   <div class="detail-section">
     <h3>Detail</h3>
@@ -128,23 +128,28 @@
 <a href="index.html" class="btn-back">Kembali</a>
 
 <script>
-  const maxVal = 30;
-  let humChart;
+  const maxTemp = 60;
+  const maxPlantHum = 100;
+ 
 
-  const getColor = (value) => {
-    if (value < 26) return '#28C76F';   // Hijau
-    else if (value < 28) return '#FBC02D'; // Kuning
-    else return '#EF5350';             // Merah
+
+  const getColorPlantHum = (value) => {
+    if (value < 30) return '#EF5350';       // merah
+    else if (value < 60) return '#FBC02D';  // kuning
+    else return '#28C76F';                  // hijau
   };
 
-  const createChart = (ctx, initialValue) => {
-    const percent = (Math.min(initialValue, maxVal) / maxVal) * 100;
+  const createChart = (ctx, initialValue, type) => {
+    const max = type === 'temperature' ? maxTemp : maxPlantHum;
+    const percent = (Math.min(initialValue, max) / max) * 100;
+    let color = type === 'plant' ? getColorPlantHum(initialValue) : '#28C76F';
+
     return new Chart(ctx, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [percent, 100 - percent],
-          backgroundColor: [getColor(initialValue), '#E0E0E0'],
+          backgroundColor: [color, '#E0E0E0'],
           borderWidth: 0
         }]
       },
@@ -161,42 +166,42 @@
     });
   };
 
-  const updateUI = (humidity) => {
-    const percent = (Math.min(humidity, maxVal) / maxVal) * 100;
-    humChart.data.datasets[0].data = [percent, 100 - percent];
-    humChart.data.datasets[0].backgroundColor = [getColor(humidity), '#E0E0E0'];
-    humChart.update();
+  const updateChart = (chart, value, element, unit, type) => {
+    const max = type === 'temperature' ? maxTemp : maxPlantHum;
+    const percent = (Math.min(value, max) / max) * 100;
+    const color = type === 'plant' ? getColorPlantHum(value) : '#28C76F';
 
-    document.getElementById('humValue').innerText = `${humidity}%`;
-
-    const sensorStatus = document.getElementById('sensorStatus');
-    sensorStatus.innerText = "ON";
-    sensorStatus.classList.remove("status-off");
-
-    const wateringStatus = document.getElementById('wateringStatus');
-    if (humidity > 28 || humidity < 24) {
-      wateringStatus.innerText = "ON";
-      wateringStatus.classList.remove("status-off");
-    } else {
-      wateringStatus.innerText = "OFF";
-      wateringStatus.classList.add("status-off");
-    }
+    chart.data.datasets[0].data = [percent, 100 - percent];
+    chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
+    chart.update();
+    element.innerText = `${value}${unit}`;
   };
 
   const fetchData = async () => {
     try {
       const res = await fetch('/api/data');
       const data = await res.json();
-      updateUI(data.humidity);
+
+      updateChart(plantHumChart,data.soilMoisture,document.getElementById('plantHumValue'),'%','plant' );
+
+      document.getElementById('sensorStatus').innerText = data.sensorStatus || '--';
+      document.getElementById('wateringStatus').innerText = data.wateringStatus || '--';
+
     } catch (err) {
-      console.error('Gagal mengambil data:', err);
+      console.error('Error fetching data:', err);
     }
   };
 
+  let plantHumChart;
+
   window.onload = () => {
-    humChart = createChart(document.getElementById('humChart'), 25.5);
+    plantHumChart = createChart(
+      document.getElementById('plantHumChart'),
+      45,
+      'plant'
+    );
     fetchData();
-    setInterval(fetchData, 3000);
+    setInterval(fetchData, 1000); // fetch data setiap 1 detik
   };
 </script>
 
