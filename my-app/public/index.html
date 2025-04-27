@@ -14,7 +14,7 @@
       padding: 20px; 
       box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
       margin-bottom: 20px; }
-    .title { text-align: center; font-size: 18px; font-weight: bold; color: #007f3b; margin-bottom: 1rem; }
+    .title { text-align: center; font-size: 18px; font-weight: bold; color: #1BA663; margin-bottom: 1rem; }
     .range { text-align: center; margin-top: 8px; font-size: 14px; }
     canvas { display: block; margin: auto; }
     .chart-container { position: relative; width: 300px; height: 200px; margin-left: -15px; }
@@ -23,7 +23,7 @@
       display: block;width: 200px;
       margin: 20px auto 0;
       padding: 10px; 
-      background: #007f3b; 
+      background: #1BA663; 
       color: white; 
       border: none; 
       border-radius: 15px; 
@@ -52,9 +52,144 @@
       font-size: 20px;
       margin-right: 10px;
     }
+
+    .navbar {
+  display: flex;
+  height: 80px;
+  align-items: center;
+  padding: 0px 20px;
+  position: relative;
+  background-color: #1BA663; /* Warna hijau navbar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  
+  
+}
+
+.hamburger {
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  margin-right: 20px;
+  display: none; /* default hidden, tampil di mobile */
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0 ;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px;
+}
+
+.user-profile img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-profile span {
+  color: white;
+  font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .navbar {
+    background-color: #1BA663; /* Warna hijau navbar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 61px;
+  }
+
+  .card-mode{
+    margin-top: 4rem;
+  }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    background-color: #1BA663;
+    flex-direction: column;
+    width: 150px;
+    border-radius: 5px;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+    text-align: left;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .logo {
+    display: none; /* sembunyikan logo di mobile */
+  }
+
+  .user-profile {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+  }
+}
+
   </style>
 </head>
 <body>
+
+  <nav class="navbar">
+    <div class="hamburger" id="hamburger">&#9776;</div>
+    <div class="logo" id="logo">OrchiCare</div>
+    
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Monitoring</a></li>
+      <li><a href="#">Kontrol</a></li>
+      <li><a href="#">Pengaturan</a></li>
+    </ul>
+  
+    <div class="user-profile" id="userProfile">
+      <span id="userName">Username</span>
+      <img src="default-avatar.png" alt="Profile" id="profilePic">
+    </div>
+  </nav>
+
 
 <div class="card-mode">
   <h4> Sitem dalam Mode Otomatis</h1>
@@ -188,6 +323,30 @@ window.onload = () => {
   fetchData();
   setInterval(fetchData, 1000);
 };
+
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const userName = document.getElementById('userName');
+const profilePic = document.getElementById('profilePic');
+
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});
+
+// Simulasi data user setelah login
+const user = {
+  name: "Andaru Muzaky",
+  profileImage: "https://i.pravatar.cc/150?img=12" // contoh avatar random
+};
+
+// Update nama dan foto profil secara otomatis
+function updateUserProfile() {
+  userName.textContent = user.name;
+  profilePic.src = user.profileImage;
+}
+
+updateUserProfile();
+
 </script>
 
 </body>
