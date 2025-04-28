@@ -1,0 +1,40 @@
+<%- include('layouts/main', { 
+    title: 'Monitoring Greenhouse', 
+    body: `
+      <div class="card-mode">
+  <h4> Sistem dalam Mode Otomatis</h4>
+  <p>Sistem Berjalan Otomatis</p>
+  <a href="#" class="detail-button">Ubah mode ?</a>
+</div>
+
+<div class="card">
+  <div class="title">Suhu Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="tempChart"></canvas>
+    <div class="gauge-value" id="tempValue">--°C</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+  <a href="/detail_temp" class="detail-button">Detail</a>
+</div>
+
+<div class="card">
+  <div class="title">Kelembapan Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="humChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+  <a href="/detail_hum" class="detail-button">Detail</a>
+</div>
+
+<div class="card">
+  <div class="title">Kelembapan Tanaman</div>
+  <div class="chart-container">
+    <canvas id="plantHumChart"></canvas>
+    <div class="gauge-value" id="plantHumValue">--%</div>
+  </div>
+  <div class="range"><span>20</span><span>80</span></div>
+  <a href="/detail_hum_plant" class="detail-button">Detail</a>
+</div>
+    `
+}) %>

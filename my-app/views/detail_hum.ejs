@@ -1,0 +1,31 @@
+<%- include('layouts/main', { 
+    title: 'Halaman Utama', 
+    body: `
+     <div class="card">
+  <div class="title">Kelembapan Greenhouse</div>
+  <div class="chart-container">
+    <canvas id="humChart"></canvas>
+    <div class="gauge-value" id="humValue">--%</div>
+  </div>
+  <div class="range"><span>24</span><span>30</span></div>
+
+  <div class="detail-section">
+    <h3>Detail</h3>
+    <div class="detail-row">
+      <span>Sensor</span>
+      <span class="status-pill" id="sensorStatus">--</span>
+    </div>
+    <div class="detail-row">
+      <span>Penyiraman</span>
+      <span class="status-pill status-off" id="wateringStatus">--</span>
+    </div>
+    <div class="detail-row">
+      <span>Kipas</span>
+      <span class="status-pill status-off" id="fanStatus">--</span>
+    </div>    
+  </div>
+</div>
+
+<a href="/" class="btn-back">Kembali</a>
+    `
+}) %>
