@@ -12,6 +12,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use('/', sensorRoutes);
 app.get('/', (req, res) => {
@@ -24,6 +25,10 @@ app.get('/detail_temp', (req, res) => {
 
 app.get('/detail_hum', (req, res) => {
     res.render('detail_hum'); 
+  });
+
+app.get('/controlling', (req, res) => {
+    res.render('controlling'); 
   });
 
 app.get('/detail_hum_plant', (req, res) => {

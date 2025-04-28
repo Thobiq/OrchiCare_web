@@ -3,6 +3,11 @@ const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 const userName = document.getElementById('userName');
 const profilePic = document.getElementById('profilePic');
+const fanButton = document.getElementById('fanButton');
+const fanImage = document.getElementById('fanImage');
+const sprinkleButton = document.getElementById('sprinkleButton');
+const sprinkleImage = document.getElementById('sprinkleImage');
+
 
 if (hamburger) {
   hamburger.addEventListener('click', () => {
@@ -11,8 +16,8 @@ if (hamburger) {
 }
 
 const user = {
-  name: "Andaru Muzaky",
-  profileImage: "https://i.pravatar.cc/150?img=12"
+  name: "fufufafa",
+  profileImage: "assets/gibran.jpeg"
 };
 
 function updateUserProfile() {
@@ -170,3 +175,25 @@ window.onload = () => {
   fetchData();
   setInterval(fetchData, 1000);
 };
+
+
+// ===================== Controlling Section =====================
+
+const fanOff = 'assets/img/fan-off.png';
+const fanOn = 'assets/img/fan-on.png';
+const sprinkleOff = 'assets/img/sprinkle-off.png';
+const sprinkleOn = 'assets/img/sprinkle-on.png';
+
+fanButton.addEventListener('click', () => {
+  const isOff = fanButton.textContent === 'OFF';
+  fanButton.textContent = isOff ? 'ON' : 'OFF';
+  fanImage.src = isOff ? fanOn : fanOff;
+  fanButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
+});
+
+sprinkleButton.addEventListener('click', () => {
+  const isOff = sprinkleButton.textContent === 'OFF';
+  sprinkleButton.textContent = isOff ? 'ON' : 'OFF';
+  sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
+  sprinkleButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
+});
