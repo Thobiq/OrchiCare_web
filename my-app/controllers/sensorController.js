@@ -4,9 +4,7 @@ let sensorData = {
   soilMoisture: 0, // kelembapan tanaman / tanah
 };
 
-const getSensorData = (req, res) => {
-  res.json(sensorData);
-};
+
 
 const setSensorData = (data) => {
   sensorData = {
@@ -14,6 +12,10 @@ const setSensorData = (data) => {
     humidity: data.humidity,
     soilMoisture: data.soilMoisture,
   };
+};
+
+const getSensorData = (req, res) => {
+  res.json(sensorData);
 };
 
 module.exports = {

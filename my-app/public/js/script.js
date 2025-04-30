@@ -130,6 +130,8 @@ const fetchData = async () => {
   try {
     const res = await fetch('/api/data');
     const data = await res.json();
+     
+    console.log(data);
 
     if (document.getElementById('tempChart')) {
       updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C', 'temperature');
