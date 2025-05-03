@@ -144,6 +144,14 @@ const fetchData = async () => {
     if (document.getElementById('plantHumChart')) {
       updateChart(plantHumChart, data.soilMoisture, document.getElementById('plantHumValue'), '%', 'plant');
     }
+    
+    if (data.temperature === 0 && data.humidity === 0 && data.soilMoisture === 0) {
+      showIoTNotification('Perangkat belum terhubung')
+      return;
+    }
+    else{
+      hideIoTNotification();
+    }
 
     const sensorStatusEl = document.getElementById('sensorStatus');
     const wateringEl = document.getElementById('wateringStatus');
@@ -199,3 +207,18 @@ sprinkleButton.addEventListener('click', () => {
   sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
   sprinkleButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
 });
+
+function showIoTNotification(message) {
+  const notif = document.getElementById('iot-notification');
+  document.getElementById('iot-message').textContent = message;
+  notif.classList.remove('hidden');
+}
+
+function hideIoTNotification() {
+  document.getElementById('iot-notification').classList.add('hidden');
+}
+
+function tryReconnect() {
+  alert("Mencoba menyambungkan kembali...");
+  // Di sini kamu bisa menambahkan logika koneksi ulang ke perangkat IoT
+}

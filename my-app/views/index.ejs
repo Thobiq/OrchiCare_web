@@ -38,6 +38,10 @@
   <a href="/detail_hum_plant" class="detail-button">Detail</a>
 </div>
 </div>
-
+<div id="iot-notification" class="notification hidden error">
+    <span id="iot-message">Perangkat IoT belum terhubung.</span>
+    <button id="reconnect-btn" onclick="tryReconnect()">Coba Sambungkan</button>
+    <button class="close-btn" onclick="hideIoTNotification()">×</button>
+  </div>
     `
 }) %>
