@@ -34,6 +34,10 @@ app.get('/controlling', (req, res) => {
 app.get('/detail_hum_plant', (req, res) => {
     res.render('detail_hum_plant'); 
   });
+
+app.get('/pengaturan', (req, res) => {
+    res.render('pengaturan'); 
+  });
   
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
