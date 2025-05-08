@@ -145,26 +145,27 @@ const fetchData = async () => {
       updateChart(plantHumChart, data.soilMoisture, document.getElementById('plantHumValue'), '%', 'plant');
     }
     
-    if (data.temperature === 0 && data.humidity === 0 && data.soilMoisture === 0) {
-      showIoTNotification('Perangkat belum terhubung')
-      return;
-    }
-    else{
-      hideIoTNotification();
-    }
+    
 
     const sensorStatusEl = document.getElementById('sensorStatus');
     const wateringEl = document.getElementById('wateringStatus');
     const fanEl = document.getElementById('fanStatus');
+    console.log(`data cek : ${data.fanStatus}`);
 
     if (sensorStatusEl) {
       setStatus(sensorStatusEl, data.sensorStatus || '--');
     }
     if (wateringEl) {
-      setStatus(wateringEl, data.wateringStatus || '--');
+      setStatus(wateringEl, data.sprinklerStatus || '--');
     }
     if (fanEl) {
       setStatus(fanEl, data.fanStatus || '--');
+    }
+
+    if (data.temperature === 0 || data.temperature === undefined) {
+      showIoTNotification('Perangkat belum terhubung');
+    } else if (data.temperature){
+      hideIoTNotification();
     }
 
   } catch (err) {

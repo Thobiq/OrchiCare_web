@@ -6,7 +6,9 @@ const { setSensorData } = require('../controllers/sensorController');
 let sensorData = {
   temperature: 0,
   humidity: 0,
-  soilMoisture: 0
+  soilMoisture: 0,
+  fanStatus: '--',
+  sprinklerStatus: '--'
 };
 
 const mqttClient = mqtt.connect(mqttConfig.host, {
@@ -26,12 +28,13 @@ mqttClient.on('message', async (topic, message) => {
   const msg = message.toString();
   console.log('📩 Message:', msg);
   var data = JSON.parse(msg);
-  console.log(data["kelembaban-gh"]);
-  console.log(data["fan-status"]);
+  console.log(data.fanStatus);
 
-  sensorData.temperature = data["suhu"];
-  sensorData.humidity = data["kelembaban-gh"];
-  sensorData.soilMoisture = data["kelembaban-mt"];
+  sensorData.temperature = data.temperature;
+  sensorData.humidity = data.humidity;
+  sensorData.soilMoisture = data.soilMoisture;
+  sensorData.fanStatus = data.fanStatus;
+  sensorData.sprinklerStatus = data.sprinklerStatus;
   // Update frontend data terlebih dahulu
   setSensorData(sensorData);
 
