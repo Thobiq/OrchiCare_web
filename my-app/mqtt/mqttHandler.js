@@ -9,6 +9,11 @@ let sensorData = {
   soilMoisture: 0
 };
 
+
+let temperatureBuffer = [];
+let humidityBuffer = [];
+let soilMoistureBuffer = [];
+
 const mqttClient = mqtt.connect(mqttConfig.host, {
   username: mqttConfig.username,
   password: mqttConfig.password,
@@ -24,24 +29,45 @@ mqttClient.on('connect', () => {
 
 mqttClient.on('message', async (topic, message) => {
   const msg = message.toString();
-  console.log('📩 Message:', msg);
   var data = JSON.parse(msg);
-  console.log(data["kelembaban-gh"]);
-  console.log(data["fan-status"]);
 
   sensorData.temperature = data["suhu"];
   sensorData.humidity = data["kelembaban-gh"];
   sensorData.soilMoisture = data["kelembaban-mt"];
-  // Update frontend data terlebih dahulu
+
   setSensorData(sensorData);
 
-  // Simpan ke database jika data lengkap
+
   if (sensorData.temperature && sensorData.humidity) {
-    try {
-      await insertSensorData(sensorData.temperature, sensorData.humidity);
-      console.log('💾 Data saved to DB');
-    } catch (err) {
-      console.warn('⚠️ DB Error, data not saved:', err.message);
-    }
+    temperatureBuffer.push(sensorData.temperature);
+    humidityBuffer.push(sensorData.humidity);
+    soilMoistureBuffer.push(sensorData.soilMoisture);
   }
 });
+
+setInterval(async () => {
+  if (temperatureBuffer.length > 0) {
+
+    const avgTemp = average(temperatureBuffer);
+    const avgHumidity = average(humidityBuffer);
+    const avgSoil = average(soilMoistureBuffer);
+
+    try {
+      await insertSensorData(avgTemp, avgHumidity, avgSoil);  // Sesuaikan dengan function di models/sensor.js
+      console.log(`💾 [${new Date().toISOString()}] Averaged data saved: Temp=${avgTemp}, Humidity=${avgHumidity}`);
+    } catch (err) {
+      console.warn('⚠️ Failed to save averaged data:', err.message);
+    }
+
+
+    temperatureBuffer = [];
+    humidityBuffer = [];
+    soilMoistureBuffer = [];
+  }
+}, 600000); 
+
+
+function average(arr) {
+  if (arr.length === 0) return 0;
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
