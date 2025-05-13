@@ -1,0 +1,30 @@
+<%- include('layouts/main', { 
+    title: 'Profil Pengguna', 
+    body: `
+    
+        <div class="profile-container">
+        <div class="profile-photo">
+        <img src="/assets/gibran.jpeg" alt="Profile Photo">
+        <div class="edit-icon">&#9998;</div>
+        </div>
+        <div class="profile-name">fufufafa</div>
+        <div class="profile-email">fufufafa1945@example.com</div>
+
+        <ul class="settings-list">
+            <a href="/edit_profil" style="text-decoration: none; color: inherit;">
+        <li class="settings-item">
+                <div class="setting-row">
+                    <i class="icon-edit"></i>
+                    <div class="settings-text">Edit Profile</div>
+                </div>
+                
+            </li>
+        </a>
+        </ul>
+
+        <button class="signout-btn">Sign Out</button>
+    </div>
+
+    
+    `
+}) %>

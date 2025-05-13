@@ -15,6 +15,7 @@ if (hamburger) {
   });
 }
 
+// ===================== Profil =====================
 const user = {
   name: "fufufafa",
   profileImage: "assets/gibran.jpeg"
@@ -26,8 +27,33 @@ function updateUserProfile() {
     profilePic.src = user.profileImage;
   }
 }
+   function handleSubmit(event) {
+      event.preventDefault();
 
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Contoh log (nantinya bisa diganti submit ke backend)
+      console.log("Data yang disimpan:");
+      console.log("Name:", name);
+      console.log("Email:", email);
+      console.log("Password:", password);
+
+      alert("Profile berhasil diperbarui!");
+
+      // Redirect ke halaman profile (jika ingin)
+      window.location.href = 'profile.html';
+    }
+
+  function toggleEdit() {
+      const form = document.getElementById("editProfileForm");
+      form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    }
 updateUserProfile();
+profilePic.addEventListener('click', () => {
+  window.location.href = '/profil'; 
+});
 
 // ===================== Chart Section =====================
 let tempChart, humChart, plantHumChart;
