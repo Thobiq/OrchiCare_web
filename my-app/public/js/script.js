@@ -249,3 +249,35 @@ function tryReconnect() {
   alert("Mencoba menyambungkan kembali...");
   // Di sini kamu bisa menambahkan logika koneksi ulang ke perangkat IoT
 }
+
+
+function showModal() {
+      document.getElementById("modeModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("modeModal").style.display = "none";
+    }
+
+    function setMode(mode) {
+      const title = document.getElementById("modeTitle");
+      const description = document.getElementById("modeDescription");
+
+      if (mode === "otomatis") {
+        title.innerText = "Sistem dalam Mode Otomatis";
+        description.innerText = "Sistem Berjalan Otomatis";
+      } else {
+        title.innerText = "Sistem dalam Mode Manual";
+        description.innerText = "Sistem Berjalan Secara Manual";
+      }
+
+      closeModal();
+    }
+
+    // Klik di luar modal = tutup
+    window.onclick = function(event) {
+      const modal = document.getElementById("modeModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };

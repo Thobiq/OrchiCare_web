@@ -39,11 +39,11 @@ mqttClient.on('message', async (topic, message) => {
   sensorData.soilMoisture = data.soilMoisture;
   sensorData.fanStatus = data.fanStatus;
   sensorData.sprinklerStatus = data.sprinklerStatus;
-  // Update frontend data terlebih dahulu
+  
   setSensorData(sensorData);
 
 
-  if (sensorData.temperature && sensorData.humidity) {
+  if (sensorData.temperature && sensorData.humidity && sensorData.soilMoisture) {
     temperatureBuffer.push(sensorData.temperature);
     humidityBuffer.push(sensorData.humidity);
     soilMoistureBuffer.push(sensorData.soilMoisture);
@@ -58,10 +58,10 @@ setInterval(async () => {
     const avgSoil = average(soilMoistureBuffer);
 
     try {
-      await insertSensorData(avgTemp, avgHumidity, avgSoil);  // Sesuaikan dengan function di models/sensor.js
+      await insertSensorData(avgTemp, avgHumidity, avgSoil); 
       console.log(`💾 [${new Date().toISOString()}] Averaged data saved: Temp=${avgTemp}, Humidity=${avgHumidity}`);
     } catch (err) {
-      console.warn('⚠️ Failed to save averaged data:', err.message);
+      console.warn('⚠️ Failed to save data:', err.message);
     }
 
 

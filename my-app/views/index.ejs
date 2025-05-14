@@ -1,11 +1,11 @@
 <%- include('layouts/main', { 
     title: 'Monitoring Greenhouse', 
     body: `
-      <div class="card-mode">
-  <h4> Sistem dalam Mode Otomatis</h4>
-  <p>Sistem Berjalan Otomatis</p>
-  <a href="#" class="detail-button">Ubah mode ?</a>
-</div>
+       <div class="card-mode">
+    <h4 id="modeTitle">Sistem dalam Mode Otomatis</h4>
+    <p id="modeDescription">Sistem Berjalan Otomatis</p>
+    <a href="#" class="switch-button" onclick="showModal()">Ubah mode?</a>
+  </div>
 
 <div class="card-container">
 <div class="card">
@@ -42,6 +42,16 @@
     <span id="iot-message">Perangkat IoT belum terhubung.</span>
     <button id="reconnect-btn" onclick="tryReconnect()">Coba Sambungkan</button>
     <button class="close-btn" onclick="hideIoTNotification()">×</button>
+  </div>
+  <div id="modeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3>Pilih Mode Sistem</h3>
+      <div class="modal-buttons">
+        <button class="auto-btn" onclick="setMode('otomatis')">Otomatis</button>
+        <button class="manual-btn" onclick="setMode('manual')">Manual</button>
+      </div>
+    </div>
   </div>
     `
 }) %>
