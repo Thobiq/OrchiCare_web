@@ -1,78 +1,38 @@
 const mqtt = require('mqtt');
 const mqttConfig = require('../config/mqtt');
-const { insertSensorData } = require('../models/sensor');
-const { setSensorData } = require('../controllers/sensorController');
+const sensorService = require('../services/sensorService');
 
-let sensorData = {
-  temperature: 0,
-  humidity: 0,
-  soilMoisture: 0,
-  fanStatus: '--',
-  sprinklerStatus: '--'
-};
-
-
-let temperatureBuffer = [];
-let humidityBuffer = [];
-let soilMoistureBuffer = [];
-
-const mqttClient = mqtt.connect(mqttConfig.host, {
-  username: mqttConfig.username,
-  password: mqttConfig.password,
-});
-
-mqttClient.on('connect', () => {
-  console.log('✅ Connected to MQTT Broker');
-  mqttClient.subscribe(mqttConfig.topic, (err) => {
-    if (err) console.error('❌ Subscribe failed:', err);
-    else console.log(`✅ Subscribed to topic: ${mqttConfig.topic}`);
-  });
-});
-
-mqttClient.on('message', async (topic, message) => {
-  const msg = message.toString();
-  var data = JSON.parse(msg);
-  console.log(data.fanStatus);
-
-  sensorData.temperature = data.temperature;
-  sensorData.humidity = data.humidity;
-  sensorData.soilMoisture = data.soilMoisture;
-  sensorData.fanStatus = data.fanStatus;
-  sensorData.sprinklerStatus = data.sprinklerStatus;
-  
-  setSensorData(sensorData);
-
-
-  if (sensorData.temperature && sensorData.humidity && sensorData.soilMoisture) {
-    temperatureBuffer.push(sensorData.temperature);
-    humidityBuffer.push(sensorData.humidity);
-    soilMoistureBuffer.push(sensorData.soilMoisture);
+class MqttHandler {
+  constructor() {
+    this.client = null;
   }
-});
 
-setInterval(async () => {
-  if (temperatureBuffer.length > 0) {
+  connect() {
+    this.client = mqtt.connect(mqttConfig.host, {
+      username: mqttConfig.username,
+      password: mqttConfig.password,
+    });
 
-    const avgTemp = average(temperatureBuffer);
-    const avgHumidity = average(humidityBuffer);
-    const avgSoil = average(soilMoistureBuffer);
+    this.client.on('connect', () => {
+      console.log('✅ Connected to MQTT broker');
+      this.client.subscribe(mqttConfig.topic, (err) => {
+        if (err) {
+          console.error('❌ MQTT subscribe error:', err);
+        } else {
+          console.log(`📡 Subscribed to topic: ${mqttConfig.topic}`);
+        }
+      });
+    });
 
-    try {
-      await insertSensorData(avgTemp, avgHumidity, avgSoil); 
-      console.log(`💾 [${new Date().toISOString()}] Averaged data saved: Temp=${avgTemp}, Humidity=${avgHumidity}`);
-    } catch (err) {
-      console.warn('⚠️ Failed to save data:', err.message);
-    }
-
-
-    temperatureBuffer = [];
-    humidityBuffer = [];
-    soilMoistureBuffer = [];
+    this.client.on('message', async (topic, message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        await sensorService.handleData(data);
+      } catch (err) {
+        console.error('❌ Failed to handle MQTT message:', err.message);
+      }
+    });
   }
-}, 600000); 
-
-
-function average(arr) {
-  if (arr.length === 0) return 0;
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
+
+module.exports = new MqttHandler();

@@ -1,27 +1,29 @@
-let sensorData = {
-  temperature: 0,
-  humidity: 0,
-  soilMoisture: 0,
-  fanStatus: '--',
-  sprinklerStatus: '--'
+class SensorController {
+  constructor() {
+    this.sensorData = {
+      temperature: 0,
+      humidity: 0,
+      soilMoisture: 0,
+      fanStatus: '--',
+      sprinklerStatus: '--',
+    };
 
-};
+    this.getSensorData = this.getSensorData.bind(this);
+  }
 
-const setSensorData = (data) => {
-  sensorData = {
-    temperature: data.temperature,
-    humidity: data.humidity,
-    soilMoisture: data.soilMoisture,
-    fanStatus: data.fanStatus,
-    sprinklerStatus: data.sprinklerStatus
-  };
-};
+  setSensorData(data) {
+    this.sensorData = {
+      temperature: data.temperature,
+      humidity: data.humidity,
+      soilMoisture: data.soilMoisture,
+      fanStatus: data.fanStatus,
+      sprinklerStatus: data.sprinklerStatus,
+    };
+  }
 
-const getSensorData = (req, res) => {
-  res.json(sensorData);
-};
+  getSensorData(req, res) {
+    res.json(this.sensorData);
+  }
+}
 
-module.exports = {
-  getSensorData,
-  setSensorData,
-};
+module.exports = new SensorController();

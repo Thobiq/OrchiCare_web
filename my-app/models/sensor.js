@@ -1,10 +1,26 @@
-const db = require('../config/database');
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../config/database');
 
-const insertSensorData = async (temperature, humidity) => {
-  const query = 'INSERT INTO sensor_logs (temperature, humidity, created_at) VALUES ($1, $2, NOW())';
-  await db.query(query, [temperature, humidity]);
-};
+class Sensor extends Model {}
 
-module.exports = {
-  insertSensorData,
-};
+Sensor.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  temperature: DataTypes.FLOAT,
+  humidity: DataTypes.FLOAT,
+  soilMoisture: DataTypes.FLOAT,
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  }
+}, {
+  sequelize,
+  modelName: 'Sensor',
+  tableName: 'sensor_logs',
+  timestamps: false
+});
+
+module.exports = Sensor;
