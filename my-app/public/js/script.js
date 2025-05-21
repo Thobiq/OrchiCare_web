@@ -281,3 +281,38 @@ function showModal() {
         modal.style.display = "none";
       }
     };
+
+    document.getElementById('limitForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); 
+
+    const minTemp = document.getElementById('minTemp').value;
+    const maxTemp = document.getElementById('maxTemp').value;
+    const minHum = document.getElementById('minHum').value;
+    const maxHum = document.getElementById('maxHum').value;
+    const minPlantHum = document.getElementById('minPlantHum').value;
+    const maxPlantHum = document.getElementById('maxPlantHum').value;
+
+    const formData = {
+      minTemp: minTemp,
+      maxTemp: maxTemp,
+      minHum: minHum,
+      maxHum: maxHum,
+      minPlantHum: minPlantHum,
+      maxPlantHum: maxPlantHum,
+    };
+
+    try {
+      const response = await fetch('/kontrol/limits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+      alert(result.message); 
+    } catch (error) {
+      alert('Gagal mengirim data ke server!');
+    }
+  });

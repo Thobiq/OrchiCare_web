@@ -33,6 +33,21 @@ class MqttHandler {
       }
     });
   }
+    publish(topic, message) {
+    if (this.client && this.client.connected) {
+      const payload = typeof message === 'object' ? JSON.stringify(message) : String(message);
+      this.client.publish(topic, payload, (err) => {
+        if (err) {
+          console.error('❌ MQTT publish error:', err.message);
+        } else {
+          console.log(`📤 Published to ${topic}:`, payload);
+        }
+      });
+    } else {
+      console.warn('⚠️ MQTT client not connected. Cannot publish message.');
+    }
+  }
+
 }
 
 module.exports = new MqttHandler();

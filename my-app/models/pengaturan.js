@@ -1,6 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const db = require('../config/database');
+const sequelize = db.getSequelizeInstance();
 const PengaturanMode = require('./pengaturanMode');
+
 
 class Pengaturan extends Model {}
 

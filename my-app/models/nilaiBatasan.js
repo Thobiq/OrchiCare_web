@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const db = require('../config/database');
+const sequelize = db.getSequelizeInstance();
 
 class NilaiBatasan extends Model {}
 NilaiBatasan.init({
@@ -38,3 +39,4 @@ NilaiBatasan.init({
   tableName: 'nilai_batasan',
   timestamps: false,
 });
+module.exports = NilaiBatasan;

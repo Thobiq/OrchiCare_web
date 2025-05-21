@@ -1,5 +1,7 @@
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/database');
+const { Model, DataTypes } = require('sequelize');
+const db = require('../config/database');
+const sequelize = db.getSequelizeInstance();
+
 
 class Sensor extends Model {}
 

@@ -1,38 +1,38 @@
 <%- include('layouts/main', { 
-    title: 'Pengaturan', 
-    body: `
+  title: 'Pengaturan', 
+  body: `
+  <div class="card-mode">
+      <h4> Sistem dalam Mode Otomatis</h4>
+      <p>Sistem Berjalan Otomatis</p>
+      <a href="#" class="switch-button">Ubah mode ?</a>
+  </div>
+ 
+  <div class="card-batasan">
+      <div class="title">Ubah Nilai Batasan</div>
+      <form id="limitForm" action="/kontrol/limits" method="POST">
+        <div style="margin-bottom: 1rem;">
+          <label>Suhu Greenhouse:</label><br/>
+          <input type="number" id="minTemp" name="minTemp" placeholder="Min Suhu (°C)" required /> -
+          <input type="number" id="maxTemp" name="maxTemp" placeholder="Max Suhu (°C)" required />
+        </div>
+    
+        <div style="margin-bottom: 1rem;">
+          <label>Kelembapan Greenhouse:</label><br/>
+          <input type="number" id="minHum" name="minHum" placeholder="Min Kelembapan (%)" required /> -
+          <input type="number" id="maxHum" name="maxHum" placeholder="Max Kelembapan (%)" required />
+        </div>
+    
+        <div style="margin-bottom: 1rem;">
+          <label>Kelembapan Tanaman:</label><br/>
+          <input type="number" id="minPlantHum" name="minPlantHum" placeholder="Min Kelembapan Tanaman (%)" required /> -
+          <input type="number" id="maxPlantHum" name="maxPlantHum" placeholder="Max Kelembapan Tanaman (%)" required />
+        </div>
+    
+        <button type="submit" class="detail-button">Simpan Batasan</button>
+      </form>
+  </div>
 
-    <div class="card-mode">
-        <h4> Sistem dalam Mode Otomatis</h4>
-        <p>Sistem Berjalan Otomatis</p>
-        <a href="#" class="switch-button">Ubah mode ?</a>
-      </div>
-     
-      <div class="card-batasan">
-        <div class="title">Ubah Nilai Batasan</div>
-        <form id="limitForm">
-          <div style="margin-bottom: 1rem;">
-            <label>Suhu Greenhouse:</label><br/>
-            <input type="number" id="minTemp" placeholder="Min Suhu (°C)" required /> -
-            <input type="number" id="maxTemp" placeholder="Max Suhu (°C)" required />
-          </div>
-      
-          <div style="margin-bottom: 1rem;">
-            <label>Kelembapan Greenhouse:</label><br/>
-            <input type="number" id="minHum" placeholder="Min Kelembapan (%)" required /> -
-            <input type="number" id="maxHum" placeholder="Max Kelembapan (%)" required />
-          </div>
-      
-          <div style="margin-bottom: 1rem;">
-            <label>Kelembapan Tanaman:</label><br/>
-            <input type="number" id="minPlantHum" placeholder="Min Kelembapan Tanaman (%)" required /> -
-            <input type="number" id="maxPlantHum" placeholder="Max Kelembapan Tanaman (%)" required />
-          </div>
-      
-          <button type="submit" class="detail-button">Simpan Batasan</button>
-        </form>
-      </div>
-      <div id="modeModal" class="modal">
+  <div id="modeModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
       <h3>Pilih Mode Sistem</h3>
@@ -42,5 +42,5 @@
       </div>
     </div>
   </div>
-    `
+  `
 }) %>
