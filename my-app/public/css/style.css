@@ -317,6 +317,68 @@ body {
         box-shadow: none;
       }
     }
+    /* ===================== Lihat Batasan ===================== */
+
+    .container_batasan {
+      background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    margin-top: 3rem;
+    }
+
+     .batasan-item {
+      margin-bottom: 20px;
+    }
+    .label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .nilai {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn-ubah-batasan { 
+    display: block;width: 200px;
+    margin: 20px auto 0;
+    padding: 10px; 
+    background: #1BA663; 
+    color: white; 
+    border: none; 
+    border-radius: 15px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    text-align: center; 
+    text-decoration: none; }
+  /* .btn-ubah-batasan {
+      display: block;
+      margin-top: 20px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    } */
+    /* .btn-ubah-batasan:hover {
+      background-color: #b47e41;
+    } */
+    .title-batasan {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    color: #007f3b;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
     /* ===================== Edit Profil ===================== */
     .form-container {
       width: 60%;
@@ -412,6 +474,11 @@ body {
   @media (min-width: 768px) {
   
     /* .card-mode tetap besar */
+    .container_batasan {
+      max-width: 1100px;
+      margin: 3rem auto 2rem auto;
+      width: 100%;
+    }
     .card-batasan {
       max-width: 1100px;
       margin: 4rem auto 2rem auto;
@@ -440,17 +507,38 @@ body {
   }
 
   /* ===================== Controlling ===================== */
+  /* .card-control button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+} */
+/* button[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+  pointer-events: none; 
+} */
+
+  .card-control-main{
+    margin-top: 3rem;
+    display: flex ;
+    flex-direction: row;
+    gap: 100px;
+    justify-content: center;
+  }
+
   .card-control{
     background: white;
     text-align: center;
     transition: 0.3s;
-
+    
     background: white;
     border-radius: 20px;
+    width: 400px;
     padding: 20px;
+    /* border-radius: 20px;
+    
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     margin-bottom: 20px;
-    margin-top: 5rem;
+    margin-top: 5rem; */
   }
 
 
@@ -460,6 +548,8 @@ body {
     margin-bottom: 1rem;
   }
 .card-control button {
+    width: 200px;
+    height: 50px;
     padding: 0.5rem 1.5rem;
     font-size: 16px;
     border: none;
@@ -476,6 +566,16 @@ body {
 
   /* ===================== Responsive ===================== */
   @media (max-width: 768px) {
+    .card-control button {
+    width: 100px;
+    }
+    .card-control-main{
+    margin-top: 2rem;
+    display: flex ;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+  }
     .navbar {
       height: 61px;
     }
@@ -538,6 +638,7 @@ body {
     gap: 30px;
     max-width: 1100px;
     margin: auto;
+    margin-top: 10rem;
   }
 
   /* Setiap card monitoring */

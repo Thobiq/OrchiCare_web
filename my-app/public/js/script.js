@@ -7,7 +7,7 @@ const fanButton = document.getElementById('fanButton');
 const fanImage = document.getElementById('fanImage');
 const sprinkleButton = document.getElementById('sprinkleButton');
 const sprinkleImage = document.getElementById('sprinkleImage');
-
+const modeNotice = document.getElementById('modeNotice');
 
 if (hamburger) {
   hamburger.addEventListener('click', () => {
@@ -216,24 +216,24 @@ window.onload = () => {
 
 // ===================== Controlling Section =====================
 
-const fanOff = 'assets/img/fan-off.png';
-const fanOn = 'assets/img/fan-on.png';
-const sprinkleOff = 'assets/img/sprinkle-off.png';
-const sprinkleOn = 'assets/img/sprinkle-on.png';
+// const fanOff = 'assets/img/fan-off.png';
+// const fanOn = 'assets/img/fan-on.png';
+// const sprinkleOff = 'assets/img/sprinkle-off.png';
+// const sprinkleOn = 'assets/img/sprinkle-on.png';
 
-fanButton.addEventListener('click', () => {
-  const isOff = fanButton.textContent === 'OFF';
-  fanButton.textContent = isOff ? 'ON' : 'OFF';
-  fanImage.src = isOff ? fanOn : fanOff;
-  fanButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
-});
+// fanButton.addEventListener('click', () => {
+//   const isOff = fanButton.textContent === 'OFF';
+//   fanButton.textContent = isOff ? 'ON' : 'OFF';
+//   fanImage.src = isOff ? fanOn : fanOff;
+//   fanButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
+// });
 
-sprinkleButton.addEventListener('click', () => {
-  const isOff = sprinkleButton.textContent === 'OFF';
-  sprinkleButton.textContent = isOff ? 'ON' : 'OFF';
-  sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
-  sprinkleButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
-});
+// sprinkleButton.addEventListener('click', () => {
+//   const isOff = sprinkleButton.textContent === 'OFF';
+//   sprinkleButton.textContent = isOff ? 'ON' : 'OFF';
+//   sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
+//   sprinkleButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
+// });
 
 function showIoTNotification(message) {
   const notif = document.getElementById('iot-notification');
@@ -250,30 +250,67 @@ function tryReconnect() {
   // Di sini kamu bisa menambahkan logika koneksi ulang ke perangkat IoT
 }
 
+let currentMode = 'otomatis'; // Default
+
+const fanOff = 'assets/img/fan-off.png';
+const fanOn = 'assets/img/fan-on.png';
+const sprinkleOff = 'assets/img/sprinkle-off.png';
+const sprinkleOn = 'assets/img/sprinkle-on.png';
+
+fanButton.addEventListener('click', () => {
+  if (currentMode !== 'manual') return;
+  const isOff = fanButton.textContent === 'OFF';
+  fanButton.textContent = isOff ? 'ON' : 'OFF';
+  fanImage.src = isOff ? fanOn : fanOff;
+  fanButton.classList.toggle('red', isOff);
+});
+
+// Kontrol penyiraman
+sprinkleButton.addEventListener('click', () => {
+  if (currentMode !== 'manual') return;
+  const isOff = sprinkleButton.textContent === 'OFF';
+  sprinkleButton.textContent = isOff ? 'ON' : 'OFF';
+  sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
+  sprinkleButton.classList.toggle('red', isOff);
+});
+
 
 function showModal() {
       document.getElementById("modeModal").style.display = "block";
     }
 
-    function closeModal() {
-      document.getElementById("modeModal").style.display = "none";
-    }
+function closeModal() {
+  document.getElementById("modeModal").style.display = "none";
+}
 
-    function setMode(mode) {
-      const title = document.getElementById("modeTitle");
-      const description = document.getElementById("modeDescription");
+function setMode(mode) {
+  const title = document.getElementById("modeTitle");
+  const description = document.getElementById("modeDescription");
 
-      if (mode === "otomatis") {
-        title.innerText = "Sistem dalam Mode Otomatis";
-        description.innerText = "Sistem Berjalan Otomatis";
-      } else {
-        title.innerText = "Sistem dalam Mode Manual";
-        description.innerText = "Sistem Berjalan Secara Manual";
-      }
+  currentMode = mode;
 
-      closeModal();
-    }
+  if (mode === "otomatis") {
+    title.innerText = "Sistem dalam Mode Otomatis";
+    description.innerText = "Sistem Berjalan Otomatis";
+    modeNotice.style.display = "block";
+    setControlsEnabled(false);
+  } else {
+    title.innerText = "Sistem dalam Mode Manual";
+    description.innerText = "Sistem Berjalan Secara Manual";
+    modeNotice.style.display = "none";
+    setControlsEnabled(true);
+  }
 
+  closeModal();
+}
+
+function setControlsEnabled(enabled) {
+  document.querySelectorAll('.control-button').forEach(button => {
+    button.disabled = !enabled;
+    button.style.opacity = enabled ? "1" : "0.5";
+    button.style.cursor = enabled ? "pointer" : "not-allowed";
+  });
+}
     // Klik di luar modal = tutup
     window.onclick = function(event) {
       const modal = document.getElementById("modeModal");
@@ -281,6 +318,7 @@ function showModal() {
         modal.style.display = "none";
       }
     };
+
 
     document.getElementById('limitForm').addEventListener('submit', async function (event) {
     event.preventDefault(); 

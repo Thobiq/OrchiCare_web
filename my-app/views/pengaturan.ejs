@@ -1,36 +1,51 @@
 <%- include('layouts/main', { 
   title: 'Pengaturan', 
   body: `
-  <div class="card-mode">
-      <h4> Sistem dalam Mode Otomatis</h4>
-      <p>Sistem Berjalan Otomatis</p>
-      <a href="#" class="switch-button">Ubah mode ?</a>
+<div class="card-mode">
+  <h4 id="modeTitle">Sistem dalam Mode Otomatis</h4>
+  <p id="modeDescription">Sistem Berjalan Otomatis</p>
+  <a href="#" class="switch-button" onclick="showModal()">Ubah mode?</a>
+  <p id="modeNotice" style="color: red; display: block;">* Mode otomatis aktif. Kontrol manual dinonaktifkan.</p>
+</div>
+
+<div class="card-control-main">
+  <div class="card-control" id="fanCard">
+    <img id="fanImage" src="assets/img/fan-off.png" alt="Fan">
+    <h3>Kipas</h3>
+    <button id="fanButton" class="control-button">OFF</button>
   </div>
- 
-  <div class="card-batasan">
-      <div class="title">Ubah Nilai Batasan</div>
-      <form id="limitForm" action="/kontrol/limits" method="POST">
-        <div style="margin-bottom: 1rem;">
-          <label>Suhu Greenhouse:</label><br/>
-          <input type="number" id="minTemp" name="minTemp" placeholder="Min Suhu (°C)" required /> -
-          <input type="number" id="maxTemp" name="maxTemp" placeholder="Max Suhu (°C)" required />
-        </div>
-    
-        <div style="margin-bottom: 1rem;">
-          <label>Kelembapan Greenhouse:</label><br/>
-          <input type="number" id="minHum" name="minHum" placeholder="Min Kelembapan (%)" required /> -
-          <input type="number" id="maxHum" name="maxHum" placeholder="Max Kelembapan (%)" required />
-        </div>
-    
-        <div style="margin-bottom: 1rem;">
-          <label>Kelembapan Tanaman:</label><br/>
-          <input type="number" id="minPlantHum" name="minPlantHum" placeholder="Min Kelembapan Tanaman (%)" required /> -
-          <input type="number" id="maxPlantHum" name="maxPlantHum" placeholder="Max Kelembapan Tanaman (%)" required />
-        </div>
-    
-        <button type="submit" class="detail-button">Simpan Batasan</button>
-      </form>
+
+  <div class="card-control" id="sprinkleCard">
+    <img id="sprinkleImage" src="assets/img/sprinkle-off.png" alt="Sprinkle">
+    <h3>Penyiraman</h3>
+    <button id="sprinkleButton" class="control-button">OFF</button>
   </div>
+</div>
+
+<div class="container_batasan">
+<div class="title-batasan">📊 Nilai Batasan</div>
+  <div class="batasan-item">
+    <div class="label">Suhu Greenhouse (°C)</div>
+    <div class="nilai" id="suhu-greenhouse">
+      <span id="min-suhu">--</span> - <span id="max-suhu">--</span>
+    </div>
+  </div>
+
+  <div class="batasan-item">
+    <div class="label">Kelembapan Greenhouse (%)</div>
+    <div class="nilai" id="kelembapan-greenhouse">
+      <span id="min-kgh">--</span> - <span id="max-kgh">--</span>
+    </div>
+  </div>
+
+  <div class="batasan-item">
+    <div class="label">Kelembapan Tanaman (%)</div>
+    <div class="nilai" id="kelembapan-tanaman">
+      <span id="min-kt">--</span> - <span id="max-kt">--</span>
+    </div>
+  </div>
+  <a href="/ubah_nilai_batasan" class="btn-ubah-batasan">Ubah Nilai Batasan</a>
+</div>
 
   <div id="modeModal" class="modal">
     <div class="modal-content">

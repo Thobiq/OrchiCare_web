@@ -31,8 +31,8 @@ app.get('/detail_hum', (req, res) => {
     res.render('detail_hum'); 
   });
 
-app.get('/controlling', (req, res) => {
-    res.render('controlling'); 
+app.get('/ubah_nilai_batasan', (req, res) => {
+    res.render('ubah_nilai_batasan'); 
   });
 
 app.get('/detail_hum_plant', (req, res) => {
