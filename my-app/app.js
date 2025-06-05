@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'assets')));
 app.use('/kontrol', nilaiBatasanRoutes);
 app.use('/', sensorRoutes);
 app.get('/', (req, res) => {
-  res.render('index'); // Render index.ejs
+  res.render('v_monitoring'); 
 });
 
 app.get('/detail_temp', (req, res) => {
@@ -40,7 +40,7 @@ app.get('/detail_hum_plant', (req, res) => {
   });
 
 app.get('/pengaturan', (req, res) => {
-    res.render('pengaturan'); 
+    res.render('v_pengaturan'); 
   });
   
 app.get('/profil', (req, res) => {
