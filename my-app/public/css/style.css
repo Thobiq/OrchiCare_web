@@ -161,132 +161,192 @@ canvas {
 }
 
 
-  
-  /* ===================== Profil ===================== */
-  
-  .profile-container {
-      margin-top: 8rem;
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      text-align: center;
-    }
-    
-    .profile-photo {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 10px;
-    }
-    
-    .profile-photo img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #1BA663;
-    }
-    
-    .edit-icon {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      background-color: #1BA663;
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    
-    .profile-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    
-    .profile-email {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 20px;
-    }
-    
-    .settings-list {
-      list-style: none;
-      text-align: left;
-      padding: 0 10px;
-    }
-    
-    .settings-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 10px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    
-    .settings-item:hover {
-      background-color: #f0f0f0;
-    }
-    
-    .settings-icon {
-      background-color: #1BA663;
-      color: white;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-    }
-    
-    .settings-text {
-      flex: 1;
-      font-size: 16px;
-      color: #333;
-    }
-    
-    .arrow {
-      color: #888;
-    }
-    
-    .signout-btn {
-      margin-top: 25px;
-      background-color: #1BA663;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    
-    @media screen and (max-width: 500px) {
-      .profile-container {
-        margin-top: 4rem;
-        padding: 20px 15px;
-        border-radius: 10px;
-        box-shadow: none;
-      }
-    }
-    /* ===================== Lihat Batasan ===================== */
+/* ================================================================= */
+/* ======================  DETAIL SECTION ========================== */
+/* ================================================================= */
 
-    .container_batasan {
-      background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    margin-top: 3rem;
-    }
+.detail-section {
+  background: #0e9f6e;
+  color: white;
+  border-radius: 12px;
+  margin-top: 1rem;
+  padding: 15px;
+}
+
+.detail-section h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.3);
+}
+
+.detail-button {
+  display: block;
+  width: 200px;
+  margin: 20px auto 0;
+  padding: 10px;
+  background: #1BA663;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.status-pill {
+  background: white;
+  color: #1BA663;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 14px;
+  min-width: 45px;
+  text-align: center;
+}
+
+.status-off {
+  color: white;
+  background: #9e9e9e;
+}
+
+
+/* ================================================================= */
+/* =======================  BUTTON BACK ============================ */
+/* ================================================================= */
+
+.btn-back {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: #1BA663;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  text-align: center;
+}
+
+
+/* ================================================================= */
+/* =======================  PROFIL USER ============================ */
+/* ================================================================= */
+
+.profile-container {
+  margin-top: 8rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-photo {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 10px;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1BA663;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #1BA663;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.profile-email {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.settings-list {
+  list-style: none;
+  text-align: left;
+  padding: 0 10px;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.settings-item:hover {
+  background-color: #f0f0f0;
+}
+
+.settings-icon {
+  background-color: #1BA663;
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.settings-text {
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+.arrow {
+  color: #888;
+}
+
+.signout-btn {
+  margin-top: 25px;
+  background-color: #1BA663;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+/* ================================================================= */
+/* ========================  LIHAT BATASAN ========================= */
+/* ================================================================= */
 
 .batasan-item {
   margin-bottom: 20px;
