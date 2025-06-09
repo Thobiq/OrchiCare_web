@@ -297,9 +297,9 @@ body {
       color: #888;
     }
     
-    .signout-btn {
+    .logout-btn {
       margin-top: 25px;
-      background-color: #1BA663;
+      background-color: #eb0f43;
       color: white;
       border: none;
       padding: 12px 20px;
