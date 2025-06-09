@@ -7,8 +7,6 @@ const app = express();
 require('dotenv').config();
 
 app.use(express.json());
-
-const sensorRoutes = require('./routes/sensorRoutes');
 const nilaiBatasanRoutes = require('./routes/nilaiBatasanRoutes');
 
 app.set('view engine', 'ejs');
@@ -18,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use('/kontrol', nilaiBatasanRoutes);
-app.use('/', sensorRoutes);
+app.use('/dataMonitoring', require('./routes/dataMonitoring'));
 app.get('/', (req, res) => {
   res.render('v_monitoring'); 
 });

@@ -11,8 +11,9 @@ PengaturanMode.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  nama_mode: {
+  namaMode: {
     type: DataTypes.STRING,
+    field: 'nama_mode',
     allowNull: false,
   },
 }, {
@@ -21,5 +22,11 @@ PengaturanMode.init({
   tableName: 'pengaturan_mode',
   timestamps: false,
 });
+
+PengaturanMode.getDataPengaturanMode = async function () {
+  return await this.findAll({
+    order: [['id_pengaturan_mode', 'DESC']],
+  });
+}
 
 module.exports = PengaturanMode;
