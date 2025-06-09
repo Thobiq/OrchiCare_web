@@ -28,13 +28,13 @@ class DataMonitoringController {
   }
 
   static showKelembabanGh(req, res) {
-    const { kelembapanGreenhouse } = mqttHandler.getDataMonitoring();
-    res.json({ kelembapanGreenhouse });
+    const { kelembabanGreenhouse } = mqttHandler.getDataMonitoring();
+    res.json({ kelembabanGreenhouse });
   }
 
   static showKelembabanTanaman(req, res) {
-    const { kelembapanTanaman } = mqttHandler.getDataMonitoring();
-    res.json({ kelembapanTanaman });
+    const { kelembabanTanaman } = mqttHandler.getDataMonitoring();
+    res.json({ kelembabanTanaman });
   }
  
  static async showRiwayatMonitoring(req, res) {
@@ -47,7 +47,7 @@ class DataMonitoringController {
     }
   }
 
-  
+
   // static async getLatest(req, res) {
   //   try {
   //     const data = DataMonitoring.getDataMonitoring(); 
