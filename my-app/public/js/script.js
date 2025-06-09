@@ -1,14 +1,8 @@
-// Monitoring
-// ===================== Umum =====================
+// ======================================================
+// 🧭 UMUM / NAVIGASI
+// ======================================================
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
-const userName = document.getElementById('userName');
-const profilePic = document.getElementById('profilePic');
-const fanButton = document.getElementById('fanButton');
-const fanImage = document.getElementById('fanImage');
-const sprinkleButton = document.getElementById('sprinkleButton');
-const sprinkleImage = document.getElementById('sprinkleImage');
-const modeNotice = document.getElementById('modeNotice');
 
 if (hamburger) {
   hamburger.addEventListener('click', () => {
@@ -16,7 +10,27 @@ if (hamburger) {
   });
 }
 
-// ===================== Profil =====================
+// Notifikasi koneksi IoT
+function showIoTNotification(message) {
+  const notif = document.getElementById('iot-notification');
+  document.getElementById('iot-message').textContent = message;
+  notif.classList.remove('hidden');
+}
+
+function hideIoTNotification() {
+  document.getElementById('iot-notification').classList.add('hidden');
+}
+
+function tryReconnect() {
+  alert("Mencoba menyambungkan kembali...");
+}
+
+// ======================================================
+// 👤 PROFIL PENGGUNA
+// ======================================================
+const userName = document.getElementById('userName');
+const profilePic = document.getElementById('profilePic');
+
 const user = {
   name: "fufufafa",
   profileImage: "assets/gibran.jpeg"
@@ -28,75 +42,41 @@ function updateUserProfile() {
     profilePic.src = user.profileImage;
   }
 }
-   function handleSubmit(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      // Contoh log (nantinya bisa diganti submit ke backend)
-      console.log("Data yang disimpan:");
-      console.log("Name:", name);
-      console.log("Email:", email);
-      console.log("Password:", password);
-
-      alert("Profile berhasil diperbarui!");
-
-      // Redirect ke halaman profile (jika ingin)
-      window.location.href = 'profile.html';
-    }
-
-  function toggleEdit() {
-      const form = document.getElementById("editProfileForm");
-      form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
-    }
 updateUserProfile();
-profilePic.addEventListener('click', () => {
+
+profilePic?.addEventListener('click', () => {
   window.location.href = '/profil'; 
 });
 
-// ===================== Chart Section =====================
+function handleSubmit(event) {
+  event.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  console.log("Data yang disimpan:", name, email, password);
+  alert("Profile berhasil diperbarui!");
+  window.location.href = 'profile.html';
+}
+
+function toggleEdit() {
+  const form = document.getElementById("editProfileForm");
+  form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+}
+
+// ======================================================
+// 📊 MONITORING - CHART SECTION
+// ======================================================
 let tempChart, humChart, plantHumChart;
-const maxTemp = 30;
-const maxHum = 100;
-const maxPlantHum = 100;
+const maxTemp = 30, maxHum = 100, maxPlantHum = 100;
 
-const getColorTemp = (value) => {
-  if (value >= 31) return '#EF5350';
-  else if (value >= 28 && value <= 29) return '#28C76F';
-  else if (value === 30) return '#FBC02D';
-  else return '#E0E0E0';
-};
-
-const getColorHum = (value) => {
-  if (value > 80) return '#EF5350';
-  else if (value === 80) return '#FBC02D';
-  else if (value <= 79) return '#28C76F';
-  else return '#E0E0E0';
-};
-
-const getColorPlantHum = (value) => {
-  if (value < 30) return '#EF5350';       // merah
-  else if (value < 60) return '#FBC02D';  // kuning
-  else return '#28C76F';                  // hijau
-};
+const getColorTemp = (val) => val >= 31 ? '#EF5350' : val === 30 ? '#FBC02D' : (val >= 28 ? '#28C76F' : '#E0E0E0');
+const getColorHum = (val) => val > 80 ? '#EF5350' : val === 80 ? '#FBC02D' : '#28C76F';
+const getColorPlantHum = (val) => val < 30 ? '#EF5350' : (val < 60 ? '#FBC02D' : '#28C76F');
 
 const createChart = (ctx, initialValue, type) => {
-  let max;
-  let color;
-
-  if (type === 'temperature') {
-    max = maxTemp;
-    color = getColorTemp(initialValue);
-  } else if (type === 'humidity') {
-    max = maxHum;
-    color = getColorHum(initialValue);
-  } else if (type === 'plant') {
-    max = maxPlantHum;
-    color = getColorPlantHum(initialValue);
-  }
-
+  const max = type === 'temperature' ? maxTemp : (type === 'humidity' ? maxHum : maxPlantHum);
+  const color = type === 'temperature' ? getColorTemp(initialValue) : (type === 'humidity' ? getColorHum(initialValue) : getColorPlantHum(initialValue));
   const percent = (Math.min(initialValue, max) / max) * 100;
 
   return new Chart(ctx, {
@@ -122,76 +102,42 @@ const createChart = (ctx, initialValue, type) => {
 };
 
 const updateChart = (chart, value, element, unit = '%', type = 'humidity') => {
-  let max;
-  let color;
-
-  if (type === 'temperature') {
-    max = maxTemp;
-    color = getColorTemp(value);
-  } else if (type === 'humidity') {
-    max = maxHum;
-    color = getColorHum(value);
-  } else if (type === 'plant') {
-    max = maxPlantHum;
-    color = getColorPlantHum(value);
-  }
-
+  const max = type === 'temperature' ? maxTemp : (type === 'humidity' ? maxHum : maxPlantHum);
+  const color = type === 'temperature' ? getColorTemp(value) : (type === 'humidity' ? getColorHum(value) : getColorPlantHum(value));
   const percent = (Math.min(value, max) / max) * 100;
+
   chart.data.datasets[0].data = [percent, 100 - percent];
   chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
   chart.update();
   element.innerText = `${value}${unit}`;
 };
 
-const setStatus = (element, status) => {
-  if (!element) return;
-  element.textContent = status;
-  if (status === 'ON') {
-    element.classList.remove('status-off');
-  } else {
-    element.classList.add('status-off');
-  }
-};
-
 const fetchData = async () => {
   try {
-    const res = await fetch('/api/data');
-    const data = await res.json();
-     
-    console.log(data);
+    const suhuRes = await fetch('/monitoring/suhu');
+    const suhuData = await suhuRes.json();
+
+    const humRes = await fetch('/monitoring/kelembaban-gh');
+    const humData = await humRes.json();
+
+    const plantHumRes = await fetch('/monitoring/kelembaban-tanaman');
+    const plantHumData = await plantHumRes.json();
 
     if (document.getElementById('tempChart')) {
-      updateChart(tempChart, data.temperature, document.getElementById('tempValue'), '°C', 'temperature');
+      updateChart(tempChart, suhuData.suhuGreenhouse, document.getElementById('tempValue'), '°C', 'temperature');
     }
 
     if (document.getElementById('humChart')) {
-      updateChart(humChart, data.humidity, document.getElementById('humValue'), '%', 'humidity');
+      updateChart(humChart, humData.kelembapanGreenhouse, document.getElementById('humValue'), '%', 'humidity');
     }
 
     if (document.getElementById('plantHumChart')) {
-      updateChart(plantHumChart, data.soilMoisture, document.getElementById('plantHumValue'), '%', 'plant');
-    }
-    
-    
-
-    const sensorStatusEl = document.getElementById('sensorStatus');
-    const wateringEl = document.getElementById('wateringStatus');
-    const fanEl = document.getElementById('fanStatus');
-    console.log(`data cek : ${data.fanStatus}`);
-
-    if (sensorStatusEl) {
-      setStatus(sensorStatusEl, data.sensorStatus || '--');
-    }
-    if (wateringEl) {
-      setStatus(wateringEl, data.sprinklerStatus || '--');
-    }
-    if (fanEl) {
-      setStatus(fanEl, data.fanStatus || '--');
+      updateChart(plantHumChart, plantHumData.kelembapanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
     }
 
-    if (data.temperature === 0 || data.temperature === undefined) {
+    if (suhuData.suhuGreenhouse === 0 || suhuData.suhuGreenhouse === undefined) {
       showIoTNotification('Perangkat belum terhubung');
-    } else if (data.temperature){
+    } else {
       hideIoTNotification();
     }
 
@@ -201,57 +147,23 @@ const fetchData = async () => {
 };
 
 window.onload = () => {
-  if (document.getElementById('tempChart')) {
-    tempChart = createChart(document.getElementById('tempChart'), 25.5, 'temperature');
-  }
-  if (document.getElementById('humChart')) {
-    humChart = createChart(document.getElementById('humChart'), 75, 'humidity');
-  }
-  if (document.getElementById('plantHumChart')) {
-    plantHumChart = createChart(document.getElementById('plantHumChart'), 45, 'plant');
-  }
+  tempChart = createChart(document.getElementById('tempChart'), 0, 'temperature');
+  humChart = createChart(document.getElementById('humChart'), 0, 'humidity');
+  plantHumChart = createChart(document.getElementById('plantHumChart'), 0, 'plant');
   fetchData();
   setInterval(fetchData, 1000);
 };
 
+// ======================================================
+// ⚙️ KONTROL MANUAL & MODE OTOMATIS
+// ======================================================
+const fanButton = document.getElementById('fanButton');
+const fanImage = document.getElementById('fanImage');
+const sprinkleButton = document.getElementById('sprinkleButton');
+const sprinkleImage = document.getElementById('sprinkleImage');
+const modeNotice = document.getElementById('modeNotice');
 
-// ===================== Controlling Section =====================
-
-// const fanOff = 'assets/img/fan-off.png';
-// const fanOn = 'assets/img/fan-on.png';
-// const sprinkleOff = 'assets/img/sprinkle-off.png';
-// const sprinkleOn = 'assets/img/sprinkle-on.png';
-
-// fanButton.addEventListener('click', () => {
-//   const isOff = fanButton.textContent === 'OFF';
-//   fanButton.textContent = isOff ? 'ON' : 'OFF';
-//   fanImage.src = isOff ? fanOn : fanOff;
-//   fanButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
-// });
-
-// sprinkleButton.addEventListener('click', () => {
-//   const isOff = sprinkleButton.textContent === 'OFF';
-//   sprinkleButton.textContent = isOff ? 'ON' : 'OFF';
-//   sprinkleImage.src = isOff ? sprinkleOn : sprinkleOff;
-//   sprinkleButton.classList.toggle('red', isOff); // Mengubah warna tombol menjadi merah jika "ON"
-// });
-
-function showIoTNotification(message) {
-  const notif = document.getElementById('iot-notification');
-  document.getElementById('iot-message').textContent = message;
-  notif.classList.remove('hidden');
-}
-
-function hideIoTNotification() {
-  document.getElementById('iot-notification').classList.add('hidden');
-}
-
-function tryReconnect() {
-  alert("Mencoba menyambungkan kembali...");
-  // Di sini kamu bisa menambahkan logika koneksi ulang ke perangkat IoT
-}
-
-let currentMode = 'otomatis'; // Default
+let currentMode = 'otomatis';
 
 const fanOff = 'assets/img/fan-off.png';
 const fanOn = 'assets/img/fan-on.png';
@@ -266,7 +178,6 @@ fanButton.addEventListener('click', () => {
   fanButton.classList.toggle('red', isOff);
 });
 
-// Kontrol penyiraman
 sprinkleButton.addEventListener('click', () => {
   if (currentMode !== 'manual') return;
   const isOff = sprinkleButton.textContent === 'OFF';
@@ -275,10 +186,9 @@ sprinkleButton.addEventListener('click', () => {
   sprinkleButton.classList.toggle('red', isOff);
 });
 
-
 function showModal() {
-      document.getElementById("modeModal").style.display = "block";
-    }
+  document.getElementById("modeModal").style.display = "block";
+}
 
 function closeModal() {
   document.getElementById("modeModal").style.display = "none";
@@ -312,46 +222,41 @@ function setControlsEnabled(enabled) {
     button.style.cursor = enabled ? "pointer" : "not-allowed";
   });
 }
-    // Klik di luar modal = tutup
-    window.onclick = function(event) {
-      const modal = document.getElementById("modeModal");
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    };
 
+window.onclick = function(event) {
+  const modal = document.getElementById("modeModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
 
-    document.getElementById('limitForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); 
+// ======================================================
+// 🛠️ PENGATURAN BATAS SENSOR
+// ======================================================
+document.getElementById('limitForm').addEventListener('submit', async function (event) {
+  event.preventDefault(); 
 
-    const minTemp = document.getElementById('minTemp').value;
-    const maxTemp = document.getElementById('maxTemp').value;
-    const minHum = document.getElementById('minHum').value;
-    const maxHum = document.getElementById('maxHum').value;
-    const minPlantHum = document.getElementById('minPlantHum').value;
-    const maxPlantHum = document.getElementById('maxPlantHum').value;
+  const formData = {
+    minTemp: document.getElementById('minTemp').value,
+    maxTemp: document.getElementById('maxTemp').value,
+    minHum: document.getElementById('minHum').value,
+    maxHum: document.getElementById('maxHum').value,
+    minPlantHum: document.getElementById('minPlantHum').value,
+    maxPlantHum: document.getElementById('maxPlantHum').value,
+  };
 
-    const formData = {
-      minTemp: minTemp,
-      maxTemp: maxTemp,
-      minHum: minHum,
-      maxHum: maxHum,
-      minPlantHum: minPlantHum,
-      maxPlantHum: maxPlantHum,
-    };
+  try {
+    const response = await fetch('/kontrol/limits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
 
-    try {
-      const response = await fetch('/kontrol/limits', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      const result = await response.json();
-      alert(result.message); 
-    } catch (error) {
-      alert('Gagal mengirim data ke server!');
-    }
-  });
+    const result = await response.json();
+    alert(result.message); 
+  } catch (error) {
+    alert('Gagal mengirim data ke server!');
+  }
+});

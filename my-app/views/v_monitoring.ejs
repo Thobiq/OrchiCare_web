@@ -2,50 +2,40 @@
     title: 'Monitoring Greenhouse', 
     body: `
 <div class="card-container">
-<div class="card">
-  <div class="title">Suhu Greenhouse</div>
-  <div class="chart-container">
-    <canvas id="tempChart"></canvas>
-    <div class="gauge-value" id="tempValue">--°C</div>
-  </div>
-  <div class="range"><span>24</span><span>30</span></div>
-  <a href="/detail_temp" class="detail-button">Detail</a>
-</div>
-
-<div class="card">
-  <div class="title">Kelembaban Greenhouse</div>
-  <div class="chart-container">
-    <canvas id="humChart"></canvas>
-    <div class="gauge-value" id="humValue">--%</div>
-  </div>
-  <div class="range"><span>24</span><span>30</span></div>
-  <a href="/detail_hum" class="detail-button">Detail</a>
-</div>
-
-<div class="card">
-  <div class="title">Kelembaban Tanaman</div>
-  <div class="chart-container">
-    <canvas id="plantHumChart"></canvas>
-    <div class="gauge-value" id="plantHumValue">--%</div>
-  </div>
-  <div class="range"><span>20</span><span>80</span></div>
-  <a href="/detail_hum_plant" class="detail-button">Detail</a>
-</div>
-</div>
-<div id="iot-notification" class="notification hidden error">
-    <span id="iot-message">Perangkat IoT belum terhubung.</span>
-    <button id="reconnect-btn" onclick="tryReconnect()">Coba Sambungkan</button>
-    <button class="close-btn" onclick="hideIoTNotification()">×</button>
-  </div>
-  <div id="modeModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h3>Pilih Mode Sistem</h3>
-      <div class="modal-buttons">
-        <button class="auto-btn" onclick="setMode('otomatis')">Otomatis</button>
-        <button class="manual-btn" onclick="setMode('manual')">Manual</button>
-      </div>
+  <div class="card">
+    <div class="title">Suhu Greenhouse</div>
+    <div class="chart-container">
+      <canvas id="tempChart"></canvas>
+      <div class="gauge-value" id="tempValue">--°C</div>
     </div>
+    <div class="range"><span>24</span><span>30</span></div>
+    <a href="/detail_temp" class="detail-button">Detail</a>
   </div>
-    `
-}) %>
+
+  <div class="card">
+    <div class="title">Kelembaban Greenhouse</div>
+    <div class="chart-container">
+      <canvas id="humChart"></canvas>
+      <div class="gauge-value" id="humValue">--%</div>
+    </div>
+    <div class="range"><span>40</span><span>90</span></div>
+    <a href="/detail_hum" class="detail-button">Detail</a>
+  </div>
+
+  <div class="card">
+    <div class="title">Kelembaban Tanaman</div>
+    <div class="chart-container">
+      <canvas id="plantHumChart"></canvas>
+      <div class="gauge-value" id="plantHumValue">--%</div>
+    </div>
+    <div class="range"><span>20</span><span>80</span></div>
+    <a href="/detail_hum_plant" class="detail-button">Detail</a>
+  </div>
+</div>
+
+<div id="iot-notification" class="notification hidden error">
+  <span id="iot-message">Perangkat IoT belum terhubung.</span>
+  <button id="reconnect-btn" onclick="tryReconnect()">Coba Sambungkan</button>
+  <button class="close-btn" onclick="hideIoTNotification()">&times;</button>
+</div>
+` }) %>
