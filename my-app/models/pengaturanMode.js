@@ -23,7 +23,7 @@ PengaturanMode.init({
   timestamps: false,
 });
 
-PengaturanMode.getDataPengaturanMode = async function () {
+PengaturanMode.getDataMode = async function () {
   return await this.findAll({
     order: [['id_pengaturan_mode', 'DESC']],
   });

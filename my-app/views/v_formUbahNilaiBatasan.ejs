@@ -1,0 +1,45 @@
+<%- include('layouts/main2', {
+  title: 'Ubah Nilai Batasan',
+  body: `
+<div class="card-batasan">
+  <div class="title">Ubah Nilai Batasan</div>
+  <form id="ubahBatasanForm" action="/pengaturan/ubah-nilai-batasan" method="POST">
+    <div style="margin-bottom: 1rem;">
+      <label>Suhu Greenhouse:</label><br/>
+      <input type="number" id="minSuhuGreenhouse" name="minSuhuGreenhouse" required value="${nilaiBatasan.minSuhuGreenhouse}" /> -
+      <input type="number" id="maxSuhuGreenhouse" name="maxSuhuGreenhouse" required value="${nilaiBatasan.maxSuhuGreenhouse}" />
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label>Kelembapan Greenhouse:</label><br/>
+      <input type="number" id="minKelembabanGreenhouse" name="minKelembabanGreenhouse" required value="${nilaiBatasan.minKelembabanGreenhouse}" /> -
+      <input type="number" id="maxKelembabanGreenhouse" name="maxKelembabanGreenhouse" required value="${nilaiBatasan.maxKelembabanGreenhouse}" />
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label>Kelembapan Tanaman:</label><br/>
+      <input type="number" id="minKelembabanTanaman" name="minKelembabanTanaman" required value="${nilaiBatasan.minKelembabanTanaman}" /> -
+      <input type="number" id="maxKelembabanTanaman" name="maxKelembabanTanaman" required value="${nilaiBatasan.maxKelembabanTanaman}" />
+    </div>
+
+    <button type="submit" class="detail-button">Simpan Batasan</button>
+
+    <a href="/pengaturan" >Kembali</a>
+  </form>
+</div>
+
+<!-- Modal Konfirmasi -->
+<div id="confirmModal" class="modalBatasanKonfirmasi" style="display:none;">
+  <div class="modalBatasanKonfirmasi-content">
+    <p>Yakin ingin menyimpan perubahan?</p>
+    <button id="confirmYes">Ya</button>
+    <button id="confirmNo">Tidak</button>
+  </div>
+</div>
+
+<script src="/js/ubahNilaiBatasan.js">
+  
+</script>
+
+    `
+}) %>

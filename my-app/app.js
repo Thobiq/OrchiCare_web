@@ -7,16 +7,16 @@ const app = express();
 require('dotenv').config();
 
 app.use(express.json());
-const nilaiBatasanRoutes = require('./routes/nilaiBatasanRoutes');
-
+app.use(express.urlencoded({ extended: true })); 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
 
-app.use('/kontrol', nilaiBatasanRoutes);
+app.use('/nilaiBatasan', require('./routes/nilaiBatasanRoutes'));
 app.use('/dataMonitoring', require('./routes/dataMonitoring'));
+app.use('/pengaturan', require('./routes/pengaturan'));
 app.get('/', (req, res) => {
   res.render('v_monitoring'); 
 });
@@ -28,19 +28,14 @@ app.get('/detail_temp', (req, res) => {
 app.get('/detail_hum', (req, res) => {
     res.render('detail_hum'); 
   });
-
-app.get('/ubah_nilai_batasan', (req, res) => {
-    res.render('ubah_nilai_batasan'); 
+app.get('/pengaturan', (req, res) => {
+    res.render('v_pengaturan'); 
   });
 
 app.get('/detail_hum_plant', (req, res) => {
     res.render('detail_hum_plant'); 
   });
 
-app.get('/pengaturan', (req, res) => {
-    res.render('v_pengaturan'); 
-  });
-  
 app.get('/profil', (req, res) => {
     res.render('profil'); 
   });

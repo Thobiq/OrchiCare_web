@@ -1,26 +1,21 @@
-const batasanService = require('../services/nilaiBatasanService');
 const mqttHandler = require('../mqtt/mqttHandler');
+const NilaiBatasan = require('../models/nilaiBatasan');
 
-exports.updateLimits = async (req, res) => {
-  const {
-    minTemp, maxTemp,
-    minHum, maxHum,
-    minPlantHum, maxPlantHum
-  } = req.body; 
+class NilaiBatasanController {
 
-  const configData = {
-    suhu: { min: minTemp, max: maxTemp },
-    kelembapan: { min: minHum, max: maxHum },
-    kelembapanTanaman: { min: minPlantHum, max: maxPlantHum }
-  };
-
+  static async showNilaiBatasan(req, res) {
   try {
-    await batasanService.saveLimits(configData); 
-    mqttHandler.publish('config/limits', configData); 
-
-    res.json({ message: 'Batasan berhasil diperbarui dan dikirim ke IoT.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Gagal memperbarui batasan.' });
+    const nilaiBatasan = await NilaiBatasan.getDataNilaiBatasan();
+    if (!nilaiBatasan) {
+      return res.status(404).json({ error: 'Nilai batasan not found' });
+    }
+    res.json(nilaiBatasan.toJSON());
+  } catch (error) {
+    console.error('Error fetching nilai batasan:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-};
+}
+
+
+}
+module.exports = NilaiBatasanController;

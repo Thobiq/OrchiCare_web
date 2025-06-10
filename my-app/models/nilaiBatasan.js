@@ -14,8 +14,9 @@ NilaiBatasan.init({
     field: 'max_suhu_greenhouse',
     allowNull: false,
   },
-  max_kelembaban_greenhouse: {
+  maxKelembabanGreenhouse: {
    type: DataTypes.FLOAT,
+   field: 'max_kelembaban_greenhouse',
    allowNull: false,
  },
  maxKelembabanTanaman: {
@@ -46,15 +47,16 @@ NilaiBatasan.init({
 });
 
 NilaiBatasan.getDataNilaiBatasan = async function () {
-  return await this.findAll({
-    order: [['id_nilai_batasan', 'DESC']],
+  return await this.findOne({
+    where: { id_nilai_batasan: 1 }
   });
 }
 NilaiBatasan.insertDataNilaiBatasan = async function (data) {
   return await this.create(data);
 }
 
-NilaiBatasan.updateDataNilaiBatasan = async function (id, data) {
+NilaiBatasan.updateDataNilaiBatasan = async function (data) {
+  console.log('Data diterima oleh model:', data);
   const [updated] = await this.update(data, {
     where: { id_nilai_batasan: 1 }
   });
