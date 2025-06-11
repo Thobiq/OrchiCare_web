@@ -56,7 +56,6 @@ NilaiBatasan.insertDataNilaiBatasan = async function (data) {
 }
 
 NilaiBatasan.updateDataNilaiBatasan = async function (data) {
-  console.log('Data diterima oleh model:', data);
   const [updated] = await this.update(data, {
     where: { id_nilai_batasan: 1 }
   });
