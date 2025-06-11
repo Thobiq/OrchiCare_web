@@ -2,10 +2,8 @@
 // 📊 MONITORING - CHART SECTION
 // ======================================================
 let tempChart, humChart, plantHumChart;
-const maxTemp = 30, maxHum = 100, maxPlantHum = 100;
+const maxPlantHum = 100;
 
-const getColorTemp = (val) => val >= 31 ? '#EF5350' : val === 30 ? '#FBC02D' : (val >= 28 ? '#28C76F' : '#E0E0E0');
-const getColorHum = (val) => val > 80 ? '#EF5350' : val === 80 ? '#FBC02D' : '#28C76F';
 const getColorPlantHum = (val) => val < 30 ? '#EF5350' : (val < 60 ? '#FBC02D' : '#28C76F');
 
 const createChart = (ctx, initialValue, type) => {
@@ -48,22 +46,9 @@ const updateChart = (chart, value, element, unit = '%', type = 'humidity') => {
 
 const fetchData = async () => {
   try {
-    const suhuRes = await fetch('/monitoring/suhu');
-    const suhuData = await suhuRes.json();
-
-    const humRes = await fetch('/monitoring/kelembaban-gh');
-    const humData = await humRes.json();
 
     const plantHumRes = await fetch('/monitoring/kelembaban-tanaman');
     const plantHumData = await plantHumRes.json();
-
-    if (document.getElementById('tempChart')) {
-      updateChart(tempChart, suhuData.suhuGreenhouse, document.getElementById('tempValue'), '°C', 'temperature');
-    }
-
-    if (document.getElementById('humChart')) {
-      updateChart(humChart, humData.kelembapanGreenhouse, document.getElementById('humValue'), '%', 'humidity');
-    }
 
     if (document.getElementById('plantHumChart')) {
       updateChart(plantHumChart, plantHumData.kelembapanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
@@ -81,12 +66,11 @@ const fetchData = async () => {
 };
 
 window.onload = () => {
-  tempChart = createChart(document.getElementById('tempChart'), 0, 'temperature');
-  humChart = createChart(document.getElementById('humChart'), 0, 'humidity');
   plantHumChart = createChart(document.getElementById('plantHumChart'), 0, 'plant');
   fetchData();
   setInterval(fetchData, 1000);
 };
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -95,12 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Fetched batasan:', data);
 
     if (res.ok) {
-      document.getElementById('min-suhu').innerHTML = `<b>${data.minSuhuGreenhouse}</b>`;
-      document.getElementById('max-suhu').innerHTML = `<b>${data.maxSuhuGreenhouse}</b>`;
-
-      document.getElementById('min-kgh').innerHTML = `<b>${data.minKelembabanGreenhouse}</b>`;
-      document.getElementById('max-kgh').innerHTML = `<b>${data.maxKelembabanGreenhouse}</b>`;
-
       document.getElementById('min-kt').innerHTML = `<b>${data.minKelembabanTanaman}</b>`;
       document.getElementById('max-kt').innerHTML = `<b>${data.maxKelembabanTanaman}</b>`;
     } else {

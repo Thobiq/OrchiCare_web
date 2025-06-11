@@ -7,7 +7,7 @@
       <canvas id="tempChart"></canvas>
       <div class="gauge-value" id="tempValue">--°C</div>
     </div>
-    <div class="range"><span>24</span><span>30</span></div>
+    <div class="range"><span id ="min-suhu"></span><span></span><span id="max-suhu"></span></div>
 
     <div class="detail-section">
       <h3>Detail</h3>
@@ -27,5 +27,7 @@
   </div>
 
   <a href="/" class="btn-back">Kembali</a>
+  <script src="/js/detailSuhu.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     `
 }) %>

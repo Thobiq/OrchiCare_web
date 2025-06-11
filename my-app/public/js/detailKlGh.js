@@ -88,6 +88,7 @@ window.onload = () => {
   setInterval(fetchData, 1000);
 };
 
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const res = await fetch('/pengaturan/nilai-batasan');
@@ -95,14 +96,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Fetched batasan:', data);
 
     if (res.ok) {
-      document.getElementById('min-suhu').innerHTML = `<b>${data.minSuhuGreenhouse}</b>`;
-      document.getElementById('max-suhu').innerHTML = `<b>${data.maxSuhuGreenhouse}</b>`;
-
       document.getElementById('min-kgh').innerHTML = `<b>${data.minKelembabanGreenhouse}</b>`;
       document.getElementById('max-kgh').innerHTML = `<b>${data.maxKelembabanGreenhouse}</b>`;
-
-      document.getElementById('min-kt').innerHTML = `<b>${data.minKelembabanTanaman}</b>`;
-      document.getElementById('max-kt').innerHTML = `<b>${data.maxKelembabanTanaman}</b>`;
     } else {
       console.error('Gagal mengambil nilai batasan:', data.error);
     }

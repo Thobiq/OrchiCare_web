@@ -1,5 +1,6 @@
 const DataMonitoring = require('../models/dataMonitoring');
 const mqttHandler = require('../mqtt/mqttHandler');
+const NilaiBatasan = require('../models/nilaiBatasan');
 class DataMonitoringController {
   static async getAll(req, res) {
     try {
@@ -37,6 +38,19 @@ class DataMonitoringController {
     res.json({ kelembabanTanaman });
   }
  
+  static async showNilaiBatasan(req, res) {
+    try {
+      const nilaiBatasan = await NilaiBatasan.getDataNilaiBatasan();
+      if (!nilaiBatasan) {
+        return res.status(404).json({ error: 'Nilai batasan not found' });
+      }
+      res.json(nilaiBatasan.toJSON());
+    } catch (error) {
+      console.error('Error fetching nilai batasan:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
  static async showRiwayatMonitoring(req, res) {
     try {
       const data = await DataMonitoring.getDataMonitoringdb();
