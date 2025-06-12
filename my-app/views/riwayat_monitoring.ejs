@@ -1,0 +1,42 @@
+<%- include('layouts/main3', { 
+    title: 'Edit Profil', 
+    body: `
+    <h1>Riwayat Monitoring Greenhouse</h1>
+
+  <form id="filterForm">
+    <label>Dari: <input type="date" id="from" name="from"></label>
+    <label>Sampai: <input type="date" id="to" name="to"></label>
+    <button type="submit">Tampilkan</button>
+    <button type="button" id="hapusBtn">Hapus Riwayat</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Suhu (°C)</th>
+        <th>Kelembapan Greenhouse (%)</th>
+        <th>Kelembapan Tanaman (%)</th>
+        <th>Waktu</th>
+      </tr>
+    </thead>
+    <tbody id="dataBody">
+      <tr><td colspan="4">Memuat data...</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+  <div class="modal" id="hapusModal">
+    <div class="modal-content">
+      <h2>Hapus Riwayat</h2>
+      <p>Masukkan rentang tanggal yang ingin dihapus:</p>
+      <label>Dari: <input type="date" id="hapusFrom"></label><br>
+      <label>Sampai: <input type="date" id="hapusTo"></label><br><br>
+      <button id="confirmHapus">Hapus</button>
+      <button id="cancelHapus" style="background-color:gray;">Batal</button>
+    </div>
+  </div>
+  
+  <script src="/js/riwayat.js"></script>
+
+    `
+}) %>
