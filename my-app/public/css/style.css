@@ -84,6 +84,23 @@ canvas {
 /* =======================  CARD UMUM ============================== */
 /* ================================================================= */
 
+@media screen and (min-width: 769px) {
+  /* CSS untuk tampilan desktop */
+  .card-container {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 4rem;
+  }
+
+
+
+
+}
+
+
 .card, .card-mode, .card-batasan, .container_batasan {
   background: white;
   border-radius: 20px;
@@ -114,6 +131,8 @@ canvas {
 /* ========================  MONITORING ============================ */
 /* ================================================================= */
 
+
+
 .title, .title-batasan {
   text-align: left;
   font-size: 18px;
@@ -135,7 +154,6 @@ canvas {
   width: 250px;
   height: 180px;
   margin: auto;
-  margin-left: 13px;
 }
 
 .gauge-value {
@@ -516,6 +534,8 @@ form button {
 .card-control button.red {
   background-color: red;
 }
+
+
 
 
 /* ================================================================= */

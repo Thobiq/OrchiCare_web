@@ -145,3 +145,25 @@ exports.handleResetPassword = async (req, res) => {
     `);
   }
 };
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const token = req.cookies?.token;
+    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findOne({ where: { email: decoded.email } });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      username: user.username,
+      email: user.email
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
