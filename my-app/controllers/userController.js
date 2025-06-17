@@ -1,10 +1,15 @@
-const Users = require('../models/users');
-// const bcrypt = require('bcrypt'); // Optional, for secure password
+const jwt = require('jsonwebtoken');
+const Users = require('../models/users'); // model Sequelize
 
-// Tampilkan profil user (API)
+// Ambil profil user (API)
 const getUserProfile = async (req, res) => {
+  const token = req.cookies?.token;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await Users.findOne({
+      where: { email: decoded.email },
       attributes: ['username', 'email'],
     });
 
@@ -13,16 +18,23 @@ const getUserProfile = async (req, res) => {
     }
 
     res.json(user);
-  } catch (error) {
-    console.error('Gagal mengambil data pengguna:', error);
+  } catch (err) {
+    console.error('Gagal mengambil data pengguna:', err);
     res.status(500).json({ error: 'Terjadi kesalahan pada server' });
   }
 };
 
 // Tampilkan halaman edit profil
 const getEditProfile = async (req, res) => {
+  const token = req.cookies?.token;
+  if (!token) return res.redirect('/');
+
   try {
-    const user = await Users.findByPk(1); // Ganti 1 dengan ID dinamis jika ada session
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findOne({
+      where: { email: decoded.email }
+    });
+
     res.render('edit_profil', { user });
   } catch (err) {
     console.error(err);
@@ -32,15 +44,22 @@ const getEditProfile = async (req, res) => {
 
 // Proses simpan perubahan profil
 const postEditProfile = async (req, res) => {
+  const token = req.cookies?.token;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
   const { name, email, password } = req.body;
+
   try {
-    const user = await Users.findByPk(1); // Ganti 1 dengan ID dinamis jika ada session
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Users.findOne({
+      where: { email: decoded.email }
+    });
+
     if (!user) return res.status(404).json({ error: 'User tidak ditemukan' });
 
     user.username = name;
     user.email = email;
-    user.password = password; // Gunakan bcrypt untuk hash di aplikasi real
-    // user.password = await bcrypt.hash(password, 10); // Kalau mau hash password
+    user.password = password; // kalau real pakai bcrypt hash!
 
     await user.save();
 
