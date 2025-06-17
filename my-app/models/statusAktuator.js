@@ -26,9 +26,24 @@ StatusAktuator.init({
   timestamps: false,
 }); 
 
-StatusAktuator.getDataStatusAktuator = async function () {
-  return await this.findAll({
-    order: [['id_status_aktuator', 'DESC']],
+StatusAktuator.getDataStatusKipasOn = async function () {
+  return await this.findOne({
+    where: { id_status: 1 },
+  });
+}
+StatusAktuator.getDataStatusKipasOff = async function () {
+  return await this.findOne({
+    where: { id_status: 2 },
+  });
+}
+StatusAktuator.getDataStatusPompaOn = async function () {
+  return await this.findOne({
+    where: { id_status: 3 },
+  });
+}
+StatusAktuator.getDataStatusPompaOff = async function () {
+  return await this.findOne({
+    where: { id_status: 4 },
   });
 }
 

@@ -2,7 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const db = require('../config/database');
 const mqtt = require('../config/mqtt');
 const sequelize = db.getSequelizeInstance();
-const mqttHandler = require('../mqtt/mqttHandler'); // Assuming you have a handler for MQTT
+const mqttHandler = require('../mqtt/mqttHandler'); 
 
 class DataMonitoring extends Model {}
 

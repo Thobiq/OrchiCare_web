@@ -23,10 +23,16 @@ PengaturanMode.init({
   timestamps: false,
 });
 
-PengaturanMode.getDataMode = async function () {
-  return await this.findAll({
-    order: [['id_pengaturan_mode', 'DESC']],
+PengaturanMode.DataModeManual = async function () {
+  return await this.findOne({
+    where: { id_pengaturan_mode: 2 },
   });
 }
+PengaturanMode.DataModeOtomatis = async function () {
+  return await this.findOne({
+    where: { id_pengaturan_mode: 1 },
+  });
+}
+
 
 module.exports = PengaturanMode;
