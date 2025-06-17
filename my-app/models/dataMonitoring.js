@@ -19,20 +19,20 @@ DataMonitoring.init({
   },
   kelembapanGreenhouse: {
     type: DataTypes.FLOAT,
-    field: 'data_kelembapan_greenhouse',
+    field: 'data_kelembaban_greenhouse',
     allowNull: false,
   },
   kelembapanTanaman: {
     type: DataTypes.FLOAT,
-    field: 'data_kelembapan_tanaman',
+    field: 'data_kelembaban_tanaman',
     allowNull: false,
   },
   createdAt: {
     type: DataTypes.DATE,
-    field: 'created_at',
+    field: 'createdat',
     defaultValue: DataTypes.NOW,
   }
-}, {
+},{
   sequelize,
   modelName: 'DataMonitoring',
   tableName: 'data_monitoring',

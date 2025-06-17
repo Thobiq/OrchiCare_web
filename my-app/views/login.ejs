@@ -1,0 +1,31 @@
+<%- include('layouts/main2', { 
+    title: 'login', 
+    body: `
+    
+  <div class="wrapper">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form id="login-form" action="/login" method="post">
+        <div class="input-group">
+          <input type="email" name="email" id="email" required placeholder=" " />
+          <label for="email">Email</label>
+        </div>
+        <div class="input-group">
+          <input type="password" name="password" id="password" required placeholder=" " />
+          <label for="password">Password</label>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      <a href="/forgot-password" class="forgot-link">Lupa Password?</a>
+    </div>
+     <div class="logo-container">
+    <!-- Dummy logo SVG -->
+    <svg width="180" height="180" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="90" fill="#1BA663" />
+      <text x="50%" y="55%" text-anchor="middle" fill="#fff" font-size="48" font-family="Arial" dy=".3em">LOGO</text>
+    </svg>
+  </div>
+  </div>
+  
+    `
+}) %>
