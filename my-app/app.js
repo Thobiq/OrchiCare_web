@@ -21,7 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // === FOLDER STATIS ===
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'assets'))); // Optional folder tambahan jika kamu punya assets lain
+app.use(express.static(path.join(__dirname, 'assets'))); 
 
 // === ROUTING ===
 const authRoutes = require('./routes/authRoutes');
@@ -29,12 +29,14 @@ const nilaiBatasanRoutes = require('./routes/nilaiBatasanRoutes');
 const dataMonitoringRoutes = require('./routes/dataMonitoring');
 const userRoutes = require('./routes/userRoutes');
 const riwayatRoutes = require('./routes/riwayatMonitoringRoutes');
+const pengaturanRoutes = require('./routes/pengaturanRoutes');
 
-app.use('/', authRoutes);                         // login & autentikasi
-app.use('/kontrol', nilaiBatasanRoutes);          // kontrol ambang batas
-app.use('/dataMonitoring', dataMonitoringRoutes); // data sensor
+app.use('/', authRoutes);                         
+app.use('/kontrol', nilaiBatasanRoutes);          
+app.use('/dataMonitoring', dataMonitoringRoutes); 
 app.use('/api', userRoutes); 
-app.use('/riwayat', riwayatRoutes);                     // profil user dan API lain
+app.use('/riwayat', riwayatRoutes);  
+app.use('/pengaturan', pengaturanRoutes);                   
 
 // === ROUTING HALAMAN VIEW ===
 app.get('/monitoring', (req, res) => {
