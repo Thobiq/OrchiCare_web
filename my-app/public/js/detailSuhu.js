@@ -48,10 +48,25 @@ const fetchData = async () => {
     const suhuRes = await fetch('/monitoring/suhu');
     const suhuData = await suhuRes.json();
 
-   
+    const fanRes = await fetch('/monitoring/status-fan');
+    const fanData = await fanRes.json();
+
+    const sprinklerRes = await fetch('/monitoring/status-sprinkler');
+    const sprinklerData = await sprinklerRes.json();
+
     if (document.getElementById('tempChart')) {
       updateChart(tempChart, suhuData.suhuGreenhouse, document.getElementById('tempValue'), '°C', 'temperature');
     }
+
+    // Update Status Fan
+    const fanElem = document.getElementById('fanStatus');
+    fanElem.textContent = fanData.fanStatus;
+    fanElem.className = `status-pill ${fanData.fanStatus === 'ON' ? 'status-on' : 'status-off'}`;
+
+    // Update Status Sprinkler
+    const sprinklerElem = document.getElementById('wateringStatus');
+    sprinklerElem.textContent = sprinklerData.sprinklerStatus;
+    sprinklerElem.className = `status-pill ${sprinklerData.sprinklerStatus === 'ON' ? 'status-on' : 'status-off'}`;
 
 
     if (suhuData.suhuGreenhouse === 0 || suhuData.suhuGreenhouse === undefined) {

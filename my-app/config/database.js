@@ -12,6 +12,7 @@ class Database {
         port: process.env.DB_PORT,
         dialect: 'postgres',
         logging: false,
+        timezone: '+07:00'
       }
     );
 

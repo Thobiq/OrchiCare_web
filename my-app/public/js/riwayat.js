@@ -31,8 +31,8 @@ async function fetchData(from, to) {
       tbody.innerHTML += `
         <tr>
           <td>${row.suhuGreenhouse}</td>
-          <td>${row.kelembapanGreenhouse}</td>
-          <td>${row.kelembapanTanaman}</td>
+          <td>${row.kelembabanGreenhouse}</td>
+          <td>${row.kelembabanTanaman}</td>
           <td>${new Date(row.createdAt).toLocaleString()}</td>
         </tr>
       `;

@@ -1,8 +1,12 @@
 // Load variabel lingkungan terlebih dahulu
 require('dotenv').config();
-
 // Jalankan MQTT handler jika digunakan
-require('./mqtt/mqttHandler');
+const mqttHandler = require('./mqtt/mqttHandler');
+// Inisialisasi koneksi MQTT
+mqttHandler.connect();
+
+// === IMPORT MODULES ===
+
 
 const express = require('express');
 const path = require('path');
@@ -30,10 +34,11 @@ const dataMonitoringRoutes = require('./routes/dataMonitoring');
 const userRoutes = require('./routes/userRoutes');
 const riwayatRoutes = require('./routes/riwayatMonitoringRoutes');
 const pengaturanRoutes = require('./routes/pengaturanRoutes');
+const mqtt = require('./config/mqtt');
 
 app.use('/', authRoutes);                         
 app.use('/kontrol', nilaiBatasanRoutes);          
-app.use('/dataMonitoring', dataMonitoringRoutes); 
+app.use('/monitoring', dataMonitoringRoutes); 
 app.use('/api', userRoutes); 
 app.use('/riwayat', riwayatRoutes);  
 app.use('/pengaturan', pengaturanRoutes);                   

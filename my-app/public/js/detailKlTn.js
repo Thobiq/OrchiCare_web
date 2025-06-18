@@ -50,9 +50,26 @@ const fetchData = async () => {
     const plantHumRes = await fetch('/monitoring/kelembaban-tanaman');
     const plantHumData = await plantHumRes.json();
 
+    const fanRes = await fetch('/monitoring/status-fan');
+    const fanData = await fanRes.json();
+
+    const sprinklerRes = await fetch('/monitoring/status-sprinkler');
+    const sprinklerData = await sprinklerRes.json();
+
     if (document.getElementById('plantHumChart')) {
-      updateChart(plantHumChart, plantHumData.kelembapanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
+      updateChart(plantHumChart, plantHumData.kelembabanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
     }
+
+    // Update Status Fan
+    const fanElem = document.getElementById('fanStatus');
+    fanElem.textContent = fanData.fanStatus;
+    fanElem.className = `status-pill ${fanData.fanStatus === 'ON' ? 'status-on' : 'status-off'}`;
+
+    // Update Status Sprinkler
+    const sprinklerElem = document.getElementById('wateringStatus');
+    sprinklerElem.textContent = sprinklerData.sprinklerStatus;
+    sprinklerElem.className = `status-pill ${sprinklerData.sprinklerStatus === 'ON' ? 'status-on' : 'status-off'}`;
+
 
     if (suhuData.suhuGreenhouse === 0 || suhuData.suhuGreenhouse === undefined) {
       showIoTNotification('Perangkat belum terhubung');

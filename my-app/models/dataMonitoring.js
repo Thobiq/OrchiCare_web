@@ -17,12 +17,12 @@ DataMonitoring.init({
     field: 'data_suhu_greenhouse',
     allowNull: false,
   },
-  kelembapanGreenhouse: {
+  kelembabanGreenhouse: {
     type: DataTypes.FLOAT,
     field: 'data_kelembaban_greenhouse',
     allowNull: false,
   },
-  kelembapanTanaman: {
+  kelembabanTanaman: {
     type: DataTypes.FLOAT,
     field: 'data_kelembaban_tanaman',
     allowNull: false,
@@ -40,9 +40,7 @@ DataMonitoring.init({
   timestamps: false
 });
 
-DataMonitoring.getDataMonitoring = function () {
-  return mqttHandler.latestData();
-};
+
 
 DataMonitoring.getDataMonitoringdb = async function () {
   return await this.findAll({

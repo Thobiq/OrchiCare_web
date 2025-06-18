@@ -1,6 +1,8 @@
 const DataMonitoring = require('../models/dataMonitoring');
 const mqttHandler = require('../mqtt/mqttHandler');
 const NilaiBatasan = require('../models/nilaiBatasan');
+const StatusAktuator = require('../models/statusAktuator');
+
 class DataMonitoringController {
   static async getAll(req, res) {
     try {
@@ -12,10 +14,9 @@ class DataMonitoringController {
     }
   }
 
-
- static showMonitoring(req, res) {
+  static showMonitoring(req, res) {
     try {
-      const data = DataMonitoring.getDataMonitoring();
+      const data = mqttHandler.latestData; // ✅ ambil langsung dari mqttHandler
       res.render('v_monitoring', { data });
     } catch (error) {
       console.error('Error rendering monitoring view:', error);
@@ -23,21 +24,32 @@ class DataMonitoringController {
     }
   }
 
-   static showSuhuGh(req, res) {
-    const { suhuGreenhouse } = mqttHandler.getDataMonitoring();
+  static showSuhuGh(req, res) {
+    const { suhuGreenhouse } = mqttHandler.sensorData; // ✅
     res.json({ suhuGreenhouse });
   }
 
   static showKelembabanGh(req, res) {
-    const { kelembabanGreenhouse } = mqttHandler.getDataMonitoring();
+    const { kelembabanGreenhouse } = mqttHandler.sensorData; // ✅
     res.json({ kelembabanGreenhouse });
   }
 
   static showKelembabanTanaman(req, res) {
-    const { kelembabanTanaman } = mqttHandler.getDataMonitoring();
+    const { kelembabanTanaman } = mqttHandler.sensorData; // ✅
     res.json({ kelembabanTanaman });
   }
- 
+
+  static showStatusFan(req, res) {
+    const fanStatus = mqttHandler.statusAktuator?.fanStatus ?? null;
+    res.json({ fanStatus });
+  }
+
+  static showStatusSprinkler(req, res) {
+    const sprinklerStatus = mqttHandler.statusAktuator?.sprinklerStatus ?? null;
+    res.json({ sprinklerStatus });
+  }
+
+
   static async showNilaiBatasan(req, res) {
     try {
       const nilaiBatasan = await NilaiBatasan.getDataNilaiBatasan();
@@ -51,7 +63,7 @@ class DataMonitoringController {
     }
   }
 
- static async showRiwayatMonitoring(req, res) {
+  static async showRiwayatMonitoring(req, res) {
     try {
       const data = await DataMonitoring.getDataMonitoringdb();
       res.render('v_riwayat_monitoring', { data });
@@ -61,20 +73,10 @@ class DataMonitoringController {
     }
   }
 
-
-  // static async getLatest(req, res) {
-  //   try {
-  //     const data = DataMonitoring.getDataMonitoring(); 
-  //     res.json(data);
-  //   } catch (err) {
-  //     console.error('Failed to get latest:', err);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-  // }
+  // Jika kamu ingin menambahkan route JSON semua data real-time:
+  static getLatestData(req, res) {
+    res.json(mqttHandler.latestData);
+  }
 }
-
-
-
-
 
 module.exports = DataMonitoringController;

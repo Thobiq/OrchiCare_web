@@ -1,6 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../config/database');
 const sequelize = db.getSequelizeInstance();
+const mqtt = require('../config/mqtt');
+const mqttHandler = require('../mqtt/mqttHandler');
 
 class StatusAktuator extends Model {}
 StatusAktuator.init({
@@ -53,5 +55,6 @@ StatusAktuator.updateStatusAktuator = async function (id, data) {
   });
   return updated > 0; 
 }
+
 
 module.exports = StatusAktuator;

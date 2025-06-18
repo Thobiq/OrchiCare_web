@@ -43,65 +43,89 @@ const updateChart = (chart, value, element, unit = '%', type = 'humidity') => {
   chart.data.datasets[0].data = [percent, 100 - percent];
   chart.data.datasets[0].backgroundColor = [color, '#E0E0E0'];
   chart.update();
-  element.innerText = `${value}${unit}`;
+
+  if (element) element.innerText = `${value}${unit}`;
 };
+
 
 const fetchData = async () => {
   try {
-    const suhuRes = await fetch('/monitoring/suhu');
-    const suhuData = await suhuRes.json();
-
+    
     const humRes = await fetch('/monitoring/kelembaban-gh');
     const humData = await humRes.json();
+   
+    const fanRes = await fetch('/monitoring/status-fan');
+    const fanData = await fanRes.json();
 
-    const plantHumRes = await fetch('/monitoring/kelembaban-tanaman');
-    const plantHumData = await plantHumRes.json();
+    const sprinklerRes = await fetch('/monitoring/status-sprinkler');
+    const sprinklerData = await sprinklerRes.json();
 
-    if (document.getElementById('tempChart')) {
-      updateChart(tempChart, suhuData.suhuGreenhouse, document.getElementById('tempValue'), '°C', 'temperature');
+
+    
+    if (document.getElementById('humChart') && humChart && humData.kelembabanGreenhouse !== undefined) {
+      updateChart(
+        humChart,
+        humData.kelembabanGreenhouse,
+        document.getElementById('humValue'),
+        '%',
+        'humidity'
+      );
     }
 
-    if (document.getElementById('humChart')) {
-      updateChart(humChart, humData.kelembapanGreenhouse, document.getElementById('humValue'), '%', 'humidity');
-    }
+    // Update Status Fan
+    const fanElem = document.getElementById('fanStatus');
+    fanElem.textContent = fanData.fanStatus;
+    fanElem.className = `status-pill ${fanData.fanStatus === 'ON' ? 'status-on' : 'status-off'}`;
 
-    if (document.getElementById('plantHumChart')) {
-      updateChart(plantHumChart, plantHumData.kelembapanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
-    }
+    // Update Status Sprinkler
+    const sprinklerElem = document.getElementById('wateringStatus');
+    sprinklerElem.textContent = sprinklerData.sprinklerStatus;
+    sprinklerElem.className = `status-pill ${sprinklerData.sprinklerStatus === 'ON' ? 'status-on' : 'status-off'}`;
 
-    if (suhuData.suhuGreenhouse === 0 || suhuData.suhuGreenhouse === undefined) {
+    // Deteksi jika tidak ada perangkat
+    if (humData.kelembabanGreenhouse === 0 || humData.kelembabanGreenhouse === undefined) {
       showIoTNotification('Perangkat belum terhubung');
     } else {
       hideIoTNotification();
     }
 
   } catch (err) {
-    console.error('Error fetching data:', err);
+    console.error('❌ Error fetching data:', err);
   }
 };
 
-window.onload = () => {
-  tempChart = createChart(document.getElementById('tempChart'), 0, 'temperature');
-  humChart = createChart(document.getElementById('humChart'), 0, 'humidity');
-  plantHumChart = createChart(document.getElementById('plantHumChart'), 0, 'plant');
-  fetchData();
-  setInterval(fetchData, 1000);
-};
-
-
-document.addEventListener('DOMContentLoaded', async () => {
+// 📥 Ambil nilai batasan dan tampilkan
+const fetchNilaiBatasan = async () => {
   try {
     const res = await fetch('/pengaturan/nilai-batasan');
     const data = await res.json();
-    console.log('Fetched batasan:', data);
+    console.log('📋 Fetched batasan:', data);
 
     if (res.ok) {
       document.getElementById('min-kgh').innerHTML = `<b>${data.minKelembabanGreenhouse}</b>`;
       document.getElementById('max-kgh').innerHTML = `<b>${data.maxKelembabanGreenhouse}</b>`;
     } else {
-      console.error('Gagal mengambil nilai batasan:', data.error);
+      console.error('⚠️ Gagal mengambil nilai batasan:', data.error);
     }
   } catch (err) {
-    console.error('Terjadi kesalahan saat mengambil nilai batasan:', err);
+    console.error('❌ Terjadi kesalahan saat mengambil nilai batasan:', err);
   }
+};
+
+// 🚀 Jalankan setelah DOM siap
+document.addEventListener('DOMContentLoaded', async () => {
+  // Buat chart
+  const humCtx = document.getElementById('humChart');
+  if (humCtx) {
+    humChart = createChart(humCtx, 0, 'humidity');
+  } else {
+    console.warn('⚠️ Element humChart tidak ditemukan di DOM');
+  }
+
+  // Mulai loop data
+  await fetchData();
+  setInterval(fetchData, 1000);
+
+  // Ambil nilai batasan
+  await fetchNilaiBatasan();
 });

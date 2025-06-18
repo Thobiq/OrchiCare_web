@@ -62,11 +62,11 @@ const fetchData = async () => {
     }
 
     if (document.getElementById('humChart')) {
-      updateChart(humChart, humData.kelembapanGreenhouse, document.getElementById('humValue'), '%', 'humidity');
+      updateChart(humChart, humData.kelembabanGreenhouse, document.getElementById('humValue'), '%', 'humidity');
     }
 
     if (document.getElementById('plantHumChart')) {
-      updateChart(plantHumChart, plantHumData.kelembapanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
+      updateChart(plantHumChart, plantHumData.kelembabanTanaman, document.getElementById('plantHumValue'), '%', 'plant');
     }
 
     if (suhuData.suhuGreenhouse === 0 || suhuData.suhuGreenhouse === undefined) {
