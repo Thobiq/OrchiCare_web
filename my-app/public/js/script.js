@@ -47,7 +47,7 @@ const userName = document.getElementById('userName');
 
 
 const user = {
-  profileImage: "assets/gibran.jpeg"
+  profileImage: "assets/user.png"
 };
 
 function updateUserProfile() {
