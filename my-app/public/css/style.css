@@ -3,7 +3,7 @@
 /* ================================================================= */
 
 body {
-  font-family: sans-serif;
+  font-family: poppins, sans-serif;
   background: #f3f4f6;
   padding: 1rem;
 }
@@ -69,14 +69,14 @@ canvas {
 }
 
 .user-profile img {
-  width: 35px;
-  height: 35px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
 }
 
 .user-profile span {
   color: white;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 
@@ -96,12 +96,64 @@ canvas {
   }
 
 
-
-
+  .container_form_batasan{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 1rem;
+  }
+  
+  .card-batasan{
+      background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
 }
 
 
-.card, .card-mode, .card-batasan, .container_batasan {
+.btn-back-batasan {
+  display: block;
+  width: 185px;
+  margin: 20px auto 0;
+  padding: 10px;
+  background: #f2f3f2;
+  color: black;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.card-batasan form{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+ .container_form_batasan{
+  display: flex;
+  justify-content: center;
+  background: none;
+  border-radius: 20px;
+  padding: 0px;
+  margin-bottom: 20px;
+
+  }
+
+.card, .card-mode, .container_batasan {
   background: white;
   border-radius: 20px;
   padding: 20px;
@@ -180,13 +232,13 @@ canvas {
 
 .riwayat-button{
   display: block;
-  width: 400px;
+  width: 300px;
   margin: 20px auto 0;
   padding: 10px;
-  background: rgb(8, 176, 243);
+  background: rgb(218, 232, 16);
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   text-align: center;
@@ -267,6 +319,8 @@ canvas {
 }
 
 
+
+
 /* ================================================================= */
 /* =======================  PROFIL USER ============================ */
 /* ================================================================= */
@@ -325,7 +379,7 @@ canvas {
 
 .settings-list {
   list-style: none;
-  text-align: left;
+  text-align: center;
   padding: 0 10px;
 }
 
@@ -375,6 +429,20 @@ canvas {
   font-size: 16px;
   cursor: pointer;
 }
+
+.btn-logout {
+  width: 200px;
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: #dd1414;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  text-align: center;
+}
+
+
 
 
 /* ================================================================= */
@@ -467,6 +535,18 @@ label {
   flex: 1;
 }
 
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 90%;
+  padding: 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
 
 /* ================================================================= */
 /* =======================  PENGATURAN FORM ======================== */
@@ -543,6 +623,19 @@ form button {
 /* ================================================================= */
 
 @media screen and (max-width: 768px) {
+  
+  .container_form_batasan{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 1rem;
+  }
+  .card-batasan{
+    width: 100%;
+    background: white;
+  }
   .navbar {
     height: 61px;
   }

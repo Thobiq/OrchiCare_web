@@ -1,4 +1,12 @@
 
+   
+  body {
+  font-family: sans-serif;
+  background: #f3f4f6;
+  padding: 1rem;
+  margin-top: 7rem;
+  
+} 
    .navbar {
   display: flex;
   height: 80px;
