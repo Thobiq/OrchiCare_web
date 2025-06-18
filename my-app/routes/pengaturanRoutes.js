@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const pengaturanController = require('../controllers/pengaturanController');
+const PengaturanController = require('../controllers/pengaturanController');
 
-router.get('/nilai-batasan', pengaturanController.showDetailNilaiBatasan);
-router.get('/ubah-nilai-batasan', pengaturanController.showFormUbahNilaiBatasan);
-router.post('/ubah-nilai-batasan', pengaturanController.updateNilaiBatasan);
+// === Nilai Batasan ===
+router.get('/nilai-batasan', PengaturanController.showDetailNilaiBatasan);
+router.get('/ubah-nilai-batasan', PengaturanController.showFormUbahNilaiBatasan);
+router.post('/ubah-nilai-batasan', PengaturanController.updateNilaiBatasan);
+
+// === Mode Sistem ===
+router.post('/set-mode', PengaturanController.setMode); // otomatis/manual
+
+// === Kontrol Manual Aktuator ===
+router.post('/set-fan', PengaturanController.setFan);
+router.post('/set-sprinkler', PengaturanController.setSprinkler);
+
 module.exports = router;
